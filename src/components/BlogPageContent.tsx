@@ -1,96 +1,81 @@
 "use client";
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, BookOpen, Calendar, Clock } from 'lucide-react';
-import {
-    type BlogPost,
-    formatPublishDate,
-    getFeaturedPost,
-} from '@/lib/blog';
-
-interface BlogPageContentProps {
-    posts: BlogPost[];
-}
-
-const REDESIGN_CATEGORIES = [
-    'All',
-    'Anxiety',
-    'Trauma Recovery',
-    'Relationships',
-    'Self Compassion',
-    'Mindfulness',
-    'Life Transitions',
-    'Identity & Culture',
-    'Emotional Wellbeing',
-    'Couples & Connection',
-    'Adolescent Mental Health',
-];
-
-const REFLECTIONS = [
-    {
-        title: "What Healing Really Means",
-        excerpt: "Healing is not the absence of pain, but the capacity to carry it with gentleness. It's the slow, quiet process of welcoming back the parts of yourself you once had to reject.",
-    },
-    {
-        title: "Learning to Sit with Difficult Emotions",
-        excerpt: "We often rush to fix or escape discomfort. But sitting with grief, anger, or sadness without judgment is where the real softening happens. It is a form of self-hospitality.",
-    },
-    {
-        title: "The Importance of Feeling Seen",
-        excerpt: "In a world that demands performance, being witnessed in your raw truth is a rare medicine. Therapy is first and foremost a space where your story is held as sacred.",
-    },
-    {
-        title: "Cultural Identity and Mental Health",
-        excerpt: "Our healing cannot be separated from our roots. Integrating cultural heritage, ancestral stories, and modern self-understanding is key to a complete sense of wellness.",
-    }
-];
+import { ArrowRight, BookOpen, Heart, FileText, CheckCircle } from 'lucide-react';
 
 const RESOURCES = [
-    { type: "Guide", title: "Anxiety Coping Kit", desc: "A practical guide to soothing your nervous system during moments of acute stress." },
-    { type: "Worksheet", title: "Emotional Regulation", desc: "Interactive exercises to help identify, map, and process challenging feelings." },
-    { type: "Mindfulness Practice", title: "Grounding Exercises", desc: "Five simple sensory-based exercises to bring you back to the present moment." },
-    { type: "Journal Prompts", title: "Self-Reflection Prompts", desc: "Deep writing prompts to explore self-compassion, boundaries, and growth." },
-    { type: "Self-Care Tool", title: "Daily Wellness Checklist", desc: "A minimalist daily planner focused on emotional check-ins and self-maintenance." },
-    { type: "Resource List", title: "Mental Health Resources", desc: "A curated index of directories, emergency resources, and community aids." }
+    {
+        icon: BookOpen,
+        title: "Anxiety Coping Skills",
+        desc: "Practical strategies and exercises to help manage anxiety and build healthier coping habits.",
+        buttonText: "Download Worksheet",
+        comingSoon: false
+    },
+    {
+        icon: Heart,
+        title: "Grounding Exercises",
+        desc: "Simple grounding techniques to help reduce anxiety, manage overwhelming emotions, and reconnect with the present moment.",
+        buttonText: "Download Worksheet",
+        comingSoon: false
+    },
+    {
+        icon: FileText,
+        title: "Self-Reflection Prompts",
+        desc: "A collection of thoughtful journal prompts to encourage self-awareness, personal growth, and emotional reflection.",
+        buttonText: "View Prompts",
+        comingSoon: false,
+        isPrompts: true
+    },
+    {
+        icon: CheckCircle,
+        title: "Emotion Regulation Skills",
+        desc: "Evidence-based skills to better understand, regulate, and respond to emotions in healthier ways.",
+        buttonText: "Download Worksheet",
+        comingSoon: false
+    },
+    {
+        icon: FileText,
+        title: "Daily Wellness Checklist",
+        desc: "A practical daily checklist to support healthy routines and emotional wellbeing.",
+        buttonText: "Coming Soon",
+        comingSoon: true
+    },
+    {
+        icon: BookOpen,
+        title: "Mental Health Resources",
+        desc: "A curated collection of trusted mental health resources, crisis supports, and recommended reading.",
+        buttonText: "Coming Soon",
+        comingSoon: true
+    }
 ];
 
-function ArticleImage({ src, alt, className }: { src?: string; alt: string; className?: string }) {
-    if (src) {
-        return <img src={src} alt={alt} className={className} />;
-    }
-    return (
-        <div className={`blog-image-placeholder ${className || ''}`}>
-            <BookOpen size={32} strokeWidth={1.25} />
-        </div>
-    );
-}
+const SELF_REFLECTION_PROMPTS = [
+    "What makes me feel excited to get up in the morning?",
+    "If I had all the money and time in the world, what would I be doing?",
+    "What am I afraid of?",
+    "What do I need to stop doing and start doing?",
+    "What do I need to let go of from the past?",
+    "Do I love myself? What do I need to do to unconditionally love myself?",
+    "What does success mean to me?",
+    "What do I really want in life? Not what my family, friends, or society think I should want—what do I want?",
+    "What are my top three strengths?",
+    "What are three things I can improve on?",
+    "I am proud of myself for ______.",
+    "What do I have now that I dreamed of having years ago?",
+    "Am I holding onto something that is hurting me more than helping?",
+    "When someone gives me a compliment, do I say \"thank you\" or refuse it? If I refuse it, where did I learn that from?",
+    "Do I believe I am beautiful and worthy of love? If not, where did I learn that from?",
+    "If someone tries to give me money or buy me a meal, do I accept or refuse? If I have trouble accepting money, where did that come from?",
+    "What do I believe to be true about myself? Is it hurting or helping me?",
+    "A cluttered or messy environment can represent a cluttered mind. What is one thing I can do right now to make my environment cleaner or more organized?",
+    "What is one thing I can do today to get closer to my goal?",
+    "Who or what is stopping me from doing what I want to do? Do I need them in my life? How can I change my environment or my mindset to move past them and their influence?",
+    "What do I want my life to look like in five or ten years?"
+];
 
-export default function BlogPageContent({ posts }: BlogPageContentProps) {
-    const [activeCategory, setActiveCategory] = useState('All');
-
-    const featured = useMemo(() => getFeaturedPost(posts), [posts]);
-
-    const filteredPosts = useMemo(() => {
-        return posts.filter((post) => {
-            if (post._id === featured._id) return false;
-
-            if (activeCategory === 'All') return true;
-
-            return post.categories.some((c) => {
-                const categoryStr = c.toLowerCase().trim();
-                const activeStr = activeCategory.toLowerCase().trim();
-                
-                // Allow matching standard categories or partial combinations
-                if (categoryStr === activeStr) return true;
-                if (activeStr === 'identity & culture' && (categoryStr.includes('identity') || categoryStr.includes('culture'))) return true;
-                if (activeStr === 'couples & connection' && (categoryStr.includes('couples') || categoryStr.includes('relationship') || categoryStr.includes('connection'))) return true;
-                if (activeStr === 'self compassion' && (categoryStr.includes('self care') || categoryStr.includes('self-care') || categoryStr.includes('compassion'))) return true;
-                
-                return false;
-            });
-        });
-    }, [posts, featured._id, activeCategory]);
+export default function BlogPageContent() {
+    const [showPrompts, setShowPrompts] = useState(false);
 
     return (
         <>
@@ -115,118 +100,26 @@ export default function BlogPageContent({ posts }: BlogPageContentProps) {
                 </div>
             </section>
 
-            {/* Featured Article */}
+            {/* Blog Posts Coming Soon Section */}
             <section className="section featured-editorial-section">
                 <div className="container">
-                    <div className="featured-editorial-card">
-                        <div className="featured-editorial-img-wrap">
-                            <ArticleImage
-                                src={featured.mainImage}
-                                alt={featured.title}
-                                className="featured-editorial-img"
-                            />
-                        </div>
-                        <div className="featured-editorial-content">
-                            <span className="blog-category-tag">
-                                {featured.categories[0] || 'Featured Entry'}
-                            </span>
-                            <h2>{featured.title}</h2>
-                            <p>{featured.excerpt}</p>
-                            <div className="featured-meta-bar">
-                                <span><Calendar size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} /> {formatPublishDate(featured.publishedAt)}</span>
-                                <span><Clock size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} /> {featured.readingTime} min read</span>
-                            </div>
-                            <div>
-                                <Link href={`/blog/${featured.slug}`} className="btn btn-primary">
-                                    Read Article
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Topic Collections */}
-            <section className="topic-collections-section">
-                <div className="container">
-                    <div className="topic-collections-pills">
-                        {REDESIGN_CATEGORIES.map((category) => (
-                            <button
-                                key={category}
-                                type="button"
-                                className={`topic-pill${activeCategory === category ? ' active' : ''}`}
-                                onClick={() => setActiveCategory(category)}
-                            >
-                                {category}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* Healing Journal */}
-            <section className="section healing-journal-section">
-                <div className="container">
                     <div className="journal-section-intro text-center">
-                        <h2>From the Healing Journal</h2>
+                        <span className="blog-hero-label">Blog Posts</span>
+                        <h2>Coming Soon</h2>
                         <p style={{ color: '#6B7280', fontSize: '1rem', marginTop: '0.5rem' }}>
-                            Spacious reflections on recovery, mindfulness, and relationships.
+                            New articles on mental health, emotional wellbeing, relationships, trauma recovery, mindfulness, and personal growth will be published here soon.
                         </p>
                     </div>
-
-                    {filteredPosts.length > 0 ? (
-                        <div className="journal-editorial-grid">
-                            {filteredPosts.map((post) => (
-                                <article key={post._id} className="journal-editorial-card">
-                                    <div className="journal-card-img-wrap">
-                                        <ArticleImage
-                                            src={post.mainImage}
-                                            alt={post.title}
-                                            className="journal-card-img"
-                                        />
-                                    </div>
-                                    <span className="journal-card-category">
-                                        {post.categories[0] || 'Wellness'}
-                                    </span>
-                                    <h3 className="journal-card-title">
-                                        <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-                                    </h3>
-                                    <p className="journal-card-excerpt">{post.excerpt}</p>
-                                    <div className="journal-card-meta">
-                                        <span>{formatPublishDate(post.publishedAt)}</span>
-                                        <span>•</span>
-                                        <span>{post.readingTime} min read</span>
-                                    </div>
-                                </article>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="blog-empty-state">
-                            <p>No journal entries found in this collection. Explore another topic.</p>
-                        </div>
-                    )}
-                </div>
-            </section>
-
-            {/* Therapist Reflections */}
-            <section className="section reflections-section">
-                <div className="container">
-                    <div className="journal-section-intro text-center">
-                        <span className="blog-hero-label">Personal Thoughts</span>
-                        <h2>Reflections from Mahima</h2>
-                        <p style={{ color: '#6B7280', fontSize: '1rem', marginTop: '0.5rem' }}>
-                            Shorter, personal insights on presence, healing, and sitting with emotions.
-                        </p>
-                    </div>
-
-                    <div className="reflections-grid">
-                        {REFLECTIONS.map((reflection, idx) => (
-                            <div key={idx} className="reflection-card">
-                                <h3>{reflection.title}</h3>
-                                <p>{reflection.excerpt}</p>
-                                <span className="reflection-card-signature">— Mahima</span>
-                            </div>
-                        ))}
+                    <div style={{ 
+                        display: 'flex', 
+                        justifyContent: 'center', 
+                        marginTop: '2rem',
+                        padding: '3rem',
+                        backgroundColor: 'var(--surface-sage)',
+                        borderRadius: 'var(--radius-lg)',
+                        border: '1px solid rgba(168,181,162,0.3)'
+                    }}>
+                        <BookOpen size={64} color="#7D9182" />
                     </div>
                 </div>
             </section>
@@ -245,15 +138,61 @@ export default function BlogPageContent({ posts }: BlogPageContentProps) {
                     <div className="resource-grid">
                         {RESOURCES.map((res, idx) => (
                             <div key={idx} className="resource-editorial-card">
-                                <span className="resource-type">{res.type}</span>
+                                {res.comingSoon && <span className="resource-type" style={{ color: 'var(--warm-terracotta)' }}>Coming Soon</span>}
+                                <div className="resource-icon-wrap" style={{
+                                    width: '48px',
+                                    height: '48px',
+                                    borderRadius: 'var(--radius-md)',
+                                    backgroundColor: 'rgba(168, 181, 162, 0.1)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    marginBottom: '1rem'
+                                }}>
+                                    <res.icon size={24} color="#7D9182" />
+                                </div>
                                 <h3>{res.title}</h3>
                                 <p className="resource-desc">{res.desc}</p>
-                                <span className="resource-action-link">
-                                    Access Tool <ArrowRight size={14} />
-                                </span>
+                                {res.isPrompts ? (
+                                    <button
+                                        type="button"
+                                        className="resource-action-link"
+                                        style={{ border: 'none', background: 'none', cursor: 'pointer', fontFamily: 'var(--font-sans)', fontSize: '1rem', color: 'var(--eucalyptus-green)', fontWeight: 500 }}
+                                        onClick={() => setShowPrompts(!showPrompts)}
+                                    >
+                                        {showPrompts ? "Hide Prompts" : "View Prompts"} <ArrowRight size={14} style={{ transform: showPrompts ? 'rotate(180deg)' : 'rotate(0)' }} />
+                                    </button>
+                                ) : (
+                                    <span className="resource-action-link" style={{ opacity: res.comingSoon ? 0.5 : 1, pointerEvents: res.comingSoon ? 'none' : 'auto' }}>
+                                        {res.buttonText} <ArrowRight size={14} />
+                                    </span>
+                                )}
                             </div>
                         ))}
                     </div>
+
+                    {/* Self-Reflection Prompts Expandable Section */}
+                    {showPrompts && (
+                        <div style={{ marginTop: '3rem', padding: '2.5rem', backgroundColor: 'var(--surface-sage)', borderRadius: 'var(--radius-lg)', border: '1px solid rgba(168, 181, 162, 0.3)' }}>
+                            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', marginBottom: '1.5rem', color: 'var(--soft-charcoal)' }}>
+                                Self-Reflection Prompts
+                            </h3>
+                            <div style={{ display: 'grid', gap: '1rem' }}>
+                                {SELF_REFLECTION_PROMPTS.map((prompt, idx) => (
+                                    <div key={idx} style={{
+                                        padding: '1.25rem',
+                                        backgroundColor: 'white',
+                                        borderRadius: 'var(--radius-md)',
+                                        border: '1px solid rgba(168, 181, 162, 0.2)'
+                                    }}>
+                                        <p style={{ margin: 0, fontFamily: 'var(--font-sans)', color: 'var(--soft-charcoal)', fontSize: '1rem' }}>
+                                            • {prompt}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </section>
 
@@ -284,4 +223,3 @@ export default function BlogPageContent({ posts }: BlogPageContentProps) {
         </>
     );
 }
-

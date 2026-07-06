@@ -6,7 +6,7 @@ export default function ContactForm() {
     return (
         <div className="card" style={{ padding: '3rem' }}>
             <h2 className="mb-6">Send a Message</h2>
-            <p className="mb-8" style={{ fontSize: '0.95rem' }}>Please fill out the form below and I will get back to you within 24-48 business hours.</p>
+            <p className="mb-8" style={{ fontSize: '0.95rem' }}>Thank you for reaching out. I will get back to you within 48–72 business hours.</p>
 
             <form className="flex" style={{ flexDirection: 'column', gap: '1.5rem' }} onSubmit={(e) => e.preventDefault()}>
                 <div>

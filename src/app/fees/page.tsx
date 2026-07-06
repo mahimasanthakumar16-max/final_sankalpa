@@ -28,6 +28,7 @@ export default async function FeesPage() {
         price: string;
         badge?: string;
         icon?: any;
+        note?: string;
     };
 
     const fallbackFees: FeeItem[] = [
@@ -69,10 +70,11 @@ export default async function FeesPage() {
             id: 'group',
             title: 'Group Counseling',
             duration: '90–120 minutes',
-            description: 'Group-based therapeutic support sessions. Available soon.',
-            price: '₹800 / session',
+            description: 'Group counseling sessions are priced at ₹800 per person, per session. This pricing applies to each participant attending the group session.',
+            price: '₹800 per person / session',
             badge: 'Coming Soon',
-            icon: Clock
+            icon: Clock,
+            note: 'Pricing is charged per participant for each group counseling session.'
         }
     ];
 
@@ -109,6 +111,7 @@ export default async function FeesPage() {
                                     <p className="fee-desc">{f.description}</p>
                                     <div style={{ marginTop: 'auto' }}>
                                         <div className="fee-price">{f.price}</div>
+                                        {f.note && <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#6B7280', marginBottom: '0.5rem' }}>{f.note}</p>}
                                         <Link href="/contact" className="btn btn-outline" style={{ marginTop: '1rem' }}>Book / Enquire</Link>
                                     </div>
                                 </article>
@@ -130,6 +133,7 @@ export default async function FeesPage() {
                                     <p className="fee-desc">{f.description}</p>
                                     <div style={{ marginTop: 'auto' }}>
                                         <div className="fee-price">{f.price}</div>
+                                        {f.note && <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#6B7280', marginBottom: '0.5rem' }}>{f.note}</p>}
                                         <Link href="/contact" className="btn btn-outline" style={{ marginTop: '1rem' }}>Book / Enquire</Link>
                                     </div>
                                 </article>

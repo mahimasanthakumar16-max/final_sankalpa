@@ -1,4 +1,4 @@
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Info } from 'lucide-react';
 import { safeFetch } from '@/sanity/lib/client';
 import { faqsQuery } from '@/sanity/lib/queries';
 
@@ -10,12 +10,11 @@ export default async function FAQPage() {
         console.error("FAQ fetch failed:", error);
     }
 
-
     const fallbackFaqs = [
         {
             _id: '1',
             question: "What can I expect in the first session?",
-            answer: "The first session (often called an intake session) is about getting to know each other. I will ask about your history, what brings you to therapy now, and what you hope to achieve. It's also an opportunity for you to see how I work and ask any questions you might have."
+            answer: "The first session is a free initial consultation. We will get to know each other, I will ask about your history, what brings you to therapy now, and what you hope to achieve. It's also an opportunity for you to see how I work and ask any questions you might have."
         },
         {
             _id: '2',
@@ -24,8 +23,8 @@ export default async function FAQPage() {
         },
         {
             _id: '3',
-            question: "Do you offer virtual or in-person therapy?",
-            answer: "We currently offer both virtual (secure video call) and in-person sessions at our Chennai office. Many clients find virtual therapy just as effective and more convenient for their schedules."
+            question: "Do you offer online or in-person sessions?",
+            answer: "Currently, all counseling sessions are offered virtually to provide accessible and flexible support for clients across India.\n\nYou can choose between:\n\n• Virtual (Video Call)\n• Phone Call\n\nIn-person counseling sessions will be available soon. Updates will be shared once this service becomes available."
         },
         {
             _id: '4',
@@ -41,10 +40,34 @@ export default async function FAQPage() {
             _id: '6',
             question: "What age groups do you serve?",
             answer: "We work with adolescents (ages 13+), young adults, and adults. For clients under 18, we require initial consent from a parent or legal guardian."
+        },
+        {
+            _id: '7',
+            question: "What is your cancellation policy?",
+            answer: "Please provide at least 24 hours notice if you need to cancel or reschedule. Late cancellations or no-shows may be charged the full session fee. I understand emergencies happen — please communicate with me and we'll work something out."
+        },
+        {
+            _id: '8',
+            question: "Do you accept insurance?",
+            answer: "I am not currently on insurance panels. However, I can provide a receipt/superbill if you wish to seek reimbursement from your insurance provider. Please check with your insurance company regarding out-of-network mental health benefits."
+        },
+        {
+            _id: '9',
+            question: "What languages do you offer counseling in?",
+            answer: "Counseling services are available in both English and Tamil to help clients feel comfortable expressing themselves in the language they prefer."
+        },
+        {
+            _id: '10',
+            question: "How soon will I hear back from you after reaching out?",
+            answer: "Thank you for reaching out. I will get back to you within 48–72 business hours."
         }
     ];
 
     const faqs = cmsFaqs?.length > 0 ? cmsFaqs : fallbackFaqs;
+    const isSessionFormatQuestion = (question: string) => 
+        question.toLowerCase().includes("online") || 
+        question.toLowerCase().includes("in-person") || 
+        question.toLowerCase().includes("offer");
 
     return (
         <>
@@ -65,7 +88,49 @@ export default async function FAQPage() {
                                     <ChevronDown color="var(--eucalyptus-green)" />
                                 </summary>
                                 <div style={{ padding: '0 2rem 2rem 2rem', color: '#5A5A5A' }}>
-                                    <p style={{ marginBottom: 0, borderTop: '1px solid var(--warm-cream)', paddingTop: '1.5rem' }}>{faq.answer}</p>
+                                    <p style={{ marginBottom: isSessionFormatQuestion(faq.question) ? '1.5rem' : 0, borderTop: '1px solid var(--warm-cream)', paddingTop: '1.5rem', whiteSpace: 'pre-line' }}>{faq.answer}</p>
+                                    {isSessionFormatQuestion(faq.question) && (
+                                        <div style={{ 
+                                            display: 'flex', 
+                                            alignItems: 'flex-start', 
+                                            gap: '1rem', 
+                                            padding: '1.5rem 2rem', 
+                                            backgroundColor: 'var(--surface-sage)', 
+                                            borderRadius: 'var(--radius-lg)', 
+                                            border: '1px solid rgba(168, 181, 162, 0.3)' 
+                                        }}>
+                                            <div style={{ 
+                                                width: '40px', 
+                                                height: '40px', 
+                                                borderRadius: '50%', 
+                                                backgroundColor: 'var(--sage-green)', 
+                                                opacity: 0.15, 
+                                                display: 'flex', 
+                                                alignItems: 'center', 
+                                                justifyContent: 'center', 
+                                                flexShrink: 0 
+                                            }}>
+                                                <Info size={20} color="var(--eucalyptus-green)" />
+                                            </div>
+                                            <div>
+                                                <h4 style={{ 
+                                                    fontFamily: 'var(--font-sans)', 
+                                                    fontSize: '1rem', 
+                                                    fontWeight: 600, 
+                                                    color: 'var(--soft-charcoal)', 
+                                                    marginBottom: '0.75rem', 
+                                                    marginTop: 0 
+                                                }}>
+                                                    Current Availability
+                                                </h4>
+                                                <ul style={{ listStyle: 'none', paddingLeft: 0, margin: 0, fontSize: '1rem', color: 'var(--soft-charcoal)' }}>
+                                                    <li style={{ marginBottom: '0.5rem' }}>✔ Virtual (Video Call)</li>
+                                                    <li style={{ marginBottom: '0.5rem' }}>✔ Phone Call</li>
+                                                    <li>⏳ In-Person Counseling – Coming Soon</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </details>
                         ))}
@@ -83,4 +148,3 @@ export default async function FAQPage() {
         </>
     );
 }
-

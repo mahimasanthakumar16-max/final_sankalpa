@@ -1,6 +1,6 @@
-﻿'use client';
+'use client';
 
-import { HeartHandshake, ShieldCheck, Sparkles } from 'lucide-react';
+import { HeartHandshake, ShieldCheck, Sparkles, Heart, MessageCircle } from 'lucide-react';
 import ServiceCard from '@/components/ServiceCard';
 import GroupCounselingForm from '@/components/GroupCounselingForm';
 import TherapyAccordion from '@/components/TherapyAccordion';
@@ -44,6 +44,14 @@ export default function ServicesPage() {
             duration: '50-90 minutes',
             icon: ShieldCheck,
         },
+        {
+            id: 'adolescent',
+            title: 'Adolescent Counseling',
+            description: 'Supportive counseling designed specifically for adolescents navigating emotional, social, academic, family, and developmental challenges. Sessions provide a safe, compassionate, and non-judgmental space where young people can build resilience, develop healthy coping skills, and strengthen emotional wellbeing.',
+            idealFor: ['Academic Stress', 'Anxiety', 'Depression', 'Identity Exploration', 'Family Challenges', 'Emotional Regulation', 'Self-Esteem', 'Life Transitions'],
+            duration: '50–60 Minutes',
+            icon: Heart,
+        },
     ];
 
     const groupTags = [
@@ -63,6 +71,68 @@ export default function ServicesPage() {
                     <p className="services-intro-text">
                         Therapy is not one-size-fits-all. Every person journey is unique. I create individualized services to support your emotional wellbeing, relationships, and personal growth through a calm, compassionate, and deeply intuitive process.
                     </p>
+                </div>
+            </section>
+
+            {/* Language Support Banner */}
+            <section className="section" style={{ paddingTop: 0, paddingBottom: 'var(--spacing-lg)' }}>
+                <div className="container">
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '1rem',
+                        padding: '1.5rem 2rem',
+                        backgroundColor: 'var(--surface-sage)',
+                        borderRadius: 'var(--radius-lg)',
+                        border: '1px solid rgba(168, 181, 162, 0.3)',
+                        boxShadow: '0 4px 15px rgba(0,0,0,0.03)'
+                    }}>
+                        <div style={{
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '50%',
+                            backgroundColor: 'var(--sage-green)',
+                            opacity: 0.15,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0
+                        }}>
+                            <MessageCircle size={20} color="var(--eucalyptus-green)" />
+                        </div>
+                        <div style={{ flexGrow: 1 }}>
+                            <h3 style={{
+                                fontFamily: 'var(--font-sans)',
+                                fontSize: '1rem',
+                                fontWeight: 600,
+                                color: 'var(--soft-charcoal)',
+                                margin: 0,
+                                marginBottom: '0.25rem'
+                            }}>
+                                Counseling Services Available in English & Tamil
+                            </h3>
+                            <p style={{
+                                fontFamily: 'var(--font-sans)',
+                                fontSize: '0.875rem',
+                                color: 'var(--soft-charcoal)',
+                                margin: 0,
+                                opacity: 0.8
+                            }}>
+                                Therapy sessions are available in both English and Tamil to help clients feel comfortable expressing themselves in the language they prefer.
+                            </p>
+                        </div>
+                        <span style={{
+                            padding: '0.5rem 1rem',
+                            backgroundColor: 'var(--surface-cream)',
+                            borderRadius: 'var(--radius-pill)',
+                            fontSize: '0.875rem',
+                            fontWeight: 500,
+                            color: 'var(--eucalyptus-green)',
+                            border: '1px solid rgba(168, 181, 162, 0.3)'
+                        }}>
+                            English | தமிழ்
+                        </span>
+                    </div>
                 </div>
             </section>
 

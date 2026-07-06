@@ -7,13 +7,7 @@ import {
   ChevronLeft, 
   ChevronRight, 
   CheckCircle2, 
-  Video, 
-  MapPin, 
-  ArrowRight,
-  User,
-  Mail,
-  Phone,
-  FileText
+  ArrowRight
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -24,44 +18,41 @@ const MONTH_NAMES = [
 const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const TIME_SLOTS = [
-  "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM",
-  "11:00 AM", "11:30 AM", "01:00 PM", "01:30 PM",
-  "02:00 PM", "02:30 PM", "03:00 PM", "03:30 PM",
-  "04:00 PM", "04:30 PM"
+  "01:00 PM", "01:30 PM", "02:00 PM", "02:30 PM",
+  "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM",
+  "05:00 PM", "05:30 PM", "06:00 PM", "06:30 PM",
+  "07:00 PM", "07:30 PM", "08:00 PM", "08:30 PM",
+  "09:00 PM", "09:30 PM"
 ];
 
 const MODALITIES = [
   {
     id: "individual",
-    title: "Individual Journey",
+    title: "Individual Counseling",
     description: "Deep one-on-one therapy sessions designed to address personal challenges, build inner strength, and foster lasting mental wellness.",
-    duration: "50 Mins",
-    format: "Online & In-Person",
-    badge: "Free First Session"
+    duration: "15–20 Minutes",
+    badge: "Free Initial Consultation"
   },
   {
     id: "couples",
-    title: "Couples Harmony",
+    title: "Couples Counseling",
     description: "Collaborative counseling sessions aimed at opening healthy channels of communication, rebuilding trust, and restoring intimacy.",
-    duration: "60 Mins",
-    format: "Online & In-Person",
-    badge: "Free First Session"
+    duration: "15–20 Minutes",
+    badge: "Free Initial Consultation"
   },
   {
     id: "trauma",
-    title: "Trauma Recovery",
+    title: "Trauma Counseling",
     description: "A gentle, paced somatic approach designed to safely process trauma, reclaim safety, and integrate healing at your own speed.",
-    duration: "50 Mins",
-    format: "Online Only",
-    badge: "Free First Session"
+    duration: "15–20 Minutes",
+    badge: "Free Initial Consultation"
   },
   {
     id: "adolescent",
-    title: "Adolescent Support",
+    title: "Adolescent Counseling",
     description: "Tailored counseling for adolescents and young adults navigating developmental transitions, academic stress, or identity exploration.",
-    duration: "45 Mins",
-    format: "Online & In-Person",
-    badge: "Free First Session"
+    duration: "15–20 Minutes",
+    badge: "Free Initial Consultation"
   }
 ];
 
@@ -69,7 +60,6 @@ export default function BookingPage() {
   const [step, setStep] = useState(1);
   const [currentMonth, setCurrentMonth] = useState(() => {
     const today = new Date();
-    // Default to June 2026 if today is earlier, matching user scenario context
     if (today.getFullYear() < 2026 || (today.getFullYear() === 2026 && today.getMonth() < 5)) {
       return new Date(2026, 5, 1);
     }
@@ -84,12 +74,11 @@ export default function BookingPage() {
     name: '',
     email: '',
     phone: '',
-    mode: 'online',
+    mode: 'virtual',
     notes: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // Helper formatting functions
   const formatDateKey = (date: Date) => {
     const y = date.getFullYear();
     const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -107,12 +96,11 @@ export default function BookingPage() {
     });
   };
 
-  // Calendar math
   const year = currentMonth.getFullYear();
   const month = currentMonth.getMonth();
 
   const firstDayOfMonth = new Date(year, month, 1);
-  const startDayOfWeek = firstDayOfMonth.getDay(); // 0 is Sunday, 1 is Monday...
+  const startDayOfWeek = firstDayOfMonth.getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   const cells: (Date | null)[] = [];
@@ -171,15 +159,15 @@ export default function BookingPage() {
     }
     
     const start = new Date(y, m - 1, d, hours, minutes);
-    const durationMins = selectedModalityObj.id === 'couples' ? 60 : selectedModalityObj.id === 'adolescent' ? 45 : 50;
+    const durationMins = 15;
     const end = new Date(start.getTime() + durationMins * 60000);
     
     const formatDateISO = (dt: Date) => {
       return dt.toISOString().replace(/-|:|\.\d\d\d/g, "");
     };
     
-    const title = encodeURIComponent(`Consultation: ${selectedModalityObj.title} with Sankalpa Counseling`);
-    const details = encodeURIComponent(`Your free initial therapy consultation.\nFormat: ${formData.mode === 'online' ? 'Online (Video Link will be sent)' : 'In-Person at Sankalpa Counseling'}\nNotes: ${formData.notes || 'None'}`);
+    const title = encodeURIComponent(`Free Initial Consultation: ${selectedModalityObj.title} with Sankalpa Counseling`);
+    const details = encodeURIComponent(`Your free initial consultation.\nFormat: ${formData.mode === 'virtual' ? 'Virtual (Video Call)' : 'Phone Call'}\nNotes: ${formData.notes || 'None'}`);
     const dates = `${formatDateISO(start)}/${formatDateISO(end)}`;
     
     return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&dates=${dates}`;
@@ -220,13 +208,7 @@ export default function BookingPage() {
                 <div className="summary-row">
                   <span className="summary-label">Format</span>
                   <span className="summary-val">
-                    {formData.mode === 'online' ? 'Online (Video Call)' : 'In-Person (Office)'}
-                  </span>
-                </div>
-                <div className="summary-row">
-                  <span className="summary-label">Location</span>
-                  <span className="summary-val">
-                    {formData.mode === 'online' ? 'Online via Secure Link' : 'Sankalpa Office, Tamil Nadu'}
+                    {formData.mode === 'virtual' ? 'Virtual (Video Call)' : 'Phone Call'}
                   </span>
                 </div>
               </div>
@@ -259,14 +241,13 @@ export default function BookingPage() {
     <div className="booking-section">
       <div className="container" style={{ maxWidth: '900px' }}>
         <div className="text-center">
-          <span className="booking-pill">Free First Session</span>
+          <span className="booking-pill">Free Initial Consultation</span>
           <h1 className="booking-title">Book a Consultation</h1>
           <p className="booking-subtitle">
             Choose a time that works for you. Your first consultation is completely free and confidential.
           </p>
         </div>
 
-        {/* Stepper Progress Bar */}
         <div className="booking-stepper">
           <div className="stepper-step">
             <div className={`stepper-number ${step >= 1 ? 'active' : 'inactive'}`}>1</div>
@@ -284,13 +265,10 @@ export default function BookingPage() {
           </div>
         </div>
 
-        {/* Main Card */}
         <div className="booking-card">
-          {/* Step 1: Date & Time Selector */}
           {step === 1 && (
             <div>
               <div className="booking-grid">
-                {/* Left Column: Calendar */}
                 <div>
                   <div className="calendar-header">
                     <button 
@@ -335,7 +313,7 @@ export default function BookingPage() {
                           className={`calendar-day-cell ${isSelected ? 'selected' : ''}`}
                           onClick={() => {
                             setSelectedDate(dateKey);
-                            setSelectedTime(null); // Reset selected time on date change
+                            setSelectedTime(null);
                           }}
                           disabled={isDisabled}
                           type="button"
@@ -347,7 +325,6 @@ export default function BookingPage() {
                   </div>
                 </div>
 
-                {/* Right Column: Available Times */}
                 <div style={{ borderLeft: '1px solid #E5E7EB', paddingLeft: '2rem' }} className="available-times-pane">
                   <h3 className="times-header">
                     <Clock size={20} /> Available Times
@@ -389,7 +366,6 @@ export default function BookingPage() {
             </div>
           )}
 
-          {/* Step 2: Session Type (Modality) Selection */}
           {step === 2 && (
             <div>
               <div className="modality-grid">
@@ -409,7 +385,6 @@ export default function BookingPage() {
                       <p className="modality-desc">{modality.description}</p>
                       <div className="modality-meta">
                         <span>Duration: {modality.duration}</span>
-                        <span>{modality.format}</span>
                       </div>
                     </button>
                   );
@@ -436,7 +411,6 @@ export default function BookingPage() {
             </div>
           )}
 
-          {/* Step 3: Your Details Form */}
           {step === 3 && (
             <form onSubmit={handleFormSubmit} className="booking-form">
               <div className="form-group">
@@ -496,11 +470,17 @@ export default function BookingPage() {
                   value={formData.mode}
                   onChange={(e) => setFormData(prev => ({ ...prev, mode: e.target.value }))}
                 >
-                  <option value="online">Online (Video Call)</option>
-                  {selectedModality !== 'trauma' && (
-                    <option value="in-person">In-Person (Office)</option>
-                  )}
+                  <option value="virtual">Virtual (Video Call)</option>
+                  <option value="phone">Phone Call</option>
                 </select>
+                <p style={{ 
+                  marginTop: '0.5rem', 
+                  fontSize: '0.875rem', 
+                  color: '#6B7280', 
+                  marginBottom: 0 
+                }}>
+                  All initial consultations are currently offered virtually via secure video call or by phone.
+                </p>
               </div>
 
               <div className="form-group">
@@ -530,7 +510,7 @@ export default function BookingPage() {
                   type="submit"
                   className="btn-booking-primary"
                 >
-                  Confirm Free Appointment <CheckCircle2 size={16} />
+                  Confirm Free Consultation <CheckCircle2 size={16} />
                 </button>
               </div>
             </form>

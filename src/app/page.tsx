@@ -21,9 +21,9 @@ export default async function Home() {
 
   // Fallback Content
   const content = {
-    heroTitlePrefix: homeData?.heroTitlePrefix || "Cultivate",
-    heroTitleHighlight: homeData?.heroTitleHighlight || "Enduring",
-    heroTitleSuffix: homeData?.heroTitleSuffix || "Wellness.",
+    heroTitlePrefix: homeData?.heroTitlePrefix || "Supporting Healing,",
+    heroTitleHighlight: homeData?.heroTitleHighlight || "Growth",
+    heroTitleSuffix: homeData?.heroTitleSuffix || "and Emotional Wellbeing",
     heroSubtitle: homeData?.heroSubtitle || "A trust-centered sanctuary in Tamil Nadu, bridging modern clinical excellence with deeply intuitive, human-first emotional support.",
     heroImage: homeData?.heroImage || "/images/hero.png",
     ctaText: homeData?.ctaText || "Begin Consultation",
@@ -92,9 +92,7 @@ export default async function Home() {
               lineHeight: 1.0,
               animation: 'fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) both'
             }}>
-              {content.heroTitlePrefix} <br />
-              <span style={{ fontStyle: 'italic', color: 'var(--eucalyptus-green)' }}>{content.heroTitleHighlight}</span> <br />
-              {content.heroTitleSuffix}
+              Supporting Healing, Growth, and Emotional Wellbeing
             </h1>
 
             <div style={{ maxWidth: '650px' }}>
@@ -380,41 +378,84 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* The Ripple Effect Section */}
+      {/* Testimonials Section */}
       <section className="section bg-white">
         <div className="container">
+          <div className="text-center mb-12">
+            <span className="section-tag">Client Stories</span>
+            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', marginTop: '0.5rem' }}>What Clients Say</h2>
+          </div>
           <div style={{
-            position: 'relative',
-            padding: '5rem 4rem',
-            backgroundColor: 'var(--surface-blue)',
-            borderRadius: 'var(--radius-lg)',
-            border: '1px solid rgba(170, 187, 200, 0.1)'
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '2rem'
           }}>
-            <span style={{
-              position: 'absolute',
-              top: '1rem',
-              left: '2rem',
-              fontSize: '12rem',
-              lineHeight: 1,
-              color: 'rgba(170, 187, 200, 0.2)',
-              fontFamily: 'var(--font-serif)',
-              zIndex: 0
-            }}>“</span>
-
-            <div style={{ position: 'relative', zIndex: 1, maxWidth: '800px', margin: '0 auto' }}>
-              <h2 style={{
-                fontSize: 'clamp(1.5rem, 4vw, 2.25rem)',
-                lineHeight: 1.5,
-                fontWeight: 400,
+            {/* Testimonial 1 */}
+            <div style={{
+              backgroundColor: 'var(--surface-cream)',
+              borderRadius: 'var(--radius-lg)',
+              padding: '2.5rem',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+              position: 'relative'
+            }}>
+              <span style={{
+                position: 'absolute',
+                top: '1rem',
+                left: '1.5rem',
+                fontSize: '5rem',
+                lineHeight: 1,
+                color: 'rgba(125, 145, 130, 0.15)',
+                fontFamily: 'var(--font-serif)',
+                zIndex: 0
+              }}>“</span>
+              <p style={{
+                fontSize: '1.1rem',
+                lineHeight: 1.7,
                 color: 'var(--soft-charcoal)',
-                marginBottom: '2.5rem',
+                marginBottom: '1.5rem',
+                position: 'relative',
+                zIndex: 1,
                 fontStyle: 'italic'
               }}>
-                Working with Sankalpa Counseling was like finally finding a steady anchor in a stormy sea. The warmth, the professionalism, and the genuine care transformed how I view my mental health.
-              </h2>
+                I am so grateful to Mahima for creating a safe space where me and my husband have been able to start to heal our relationship. I have seen my husband get vulnerable for the first time and we are starting to connect again after many years.
+              </p>
               <div className="flex items-center gap-4">
-                <div style={{ width: '40px', height: '2px', backgroundColor: 'var(--eucalyptus-green)' }}></div>
-                <p style={{ margin: 0, fontWeight: 600, fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--eucalyptus-green)' }}>Verified Client Testimonial</p>
+                <div style={{ width: '30px', height: '2px', backgroundColor: 'var(--eucalyptus-green)' }}></div>
+                <p style={{ margin: 0, fontWeight: 600, fontSize: '0.875rem', color: 'var(--eucalyptus-green)' }}>— Couples Counseling Client</p>
+              </div>
+            </div>
+            {/* Testimonial 2 */}
+            <div style={{
+              backgroundColor: 'var(--surface-cream)',
+              borderRadius: 'var(--radius-lg)',
+              padding: '2.5rem',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+              position: 'relative'
+            }}>
+              <span style={{
+                position: 'absolute',
+                top: '1rem',
+                left: '1.5rem',
+                fontSize: '5rem',
+                lineHeight: 1,
+                color: 'rgba(125, 145, 130, 0.15)',
+                fontFamily: 'var(--font-serif)',
+                zIndex: 0
+              }}>“</span>
+              <p style={{
+                fontSize: '1.1rem',
+                lineHeight: 1.7,
+                color: 'var(--soft-charcoal)',
+                marginBottom: '1.5rem',
+                position: 'relative',
+                zIndex: 1,
+                fontStyle: 'italic'
+              }}>
+                Mahima has been there for me through a lot of ups and downs in my life in the past few years, and her consistent presence has been such a helpful source of strength and support for me as I have navigated career changes and a major loss in my life.
+              </p>
+              <div className="flex items-center gap-4">
+                <div style={{ width: '30px', height: '2px', backgroundColor: 'var(--eucalyptus-green)' }}></div>
+                <p style={{ margin: 0, fontWeight: 600, fontSize: '0.875rem', color: 'var(--eucalyptus-green)' }}>— Individual Counseling Client</p>
               </div>
             </div>
           </div>

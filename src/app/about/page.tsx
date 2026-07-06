@@ -33,7 +33,7 @@ export default function AboutPage() {
             letterSpacing: '0.02em',
             animation: 'fadeIn 1s ease-out both',
           }}>
-            Healing Begins with <span style={{ fontStyle: 'italic', color: 'var(--warm-terracotta)' }}>Belonging</span>
+            Healing Begins with <span style={{ fontStyle: 'italic', color: 'var(--warm-terracotta)' }}>Connection</span>
           </h1>
           <p style={{
             fontFamily: 'var(--font-sans)',
@@ -208,7 +208,7 @@ export default function AboutPage() {
                 marginBottom: '2.5rem',
                 lineHeight: 1.6,
               }}>
-                Licensed Psychotherapist &nbsp;|&nbsp; Trauma-Informed Therapist &nbsp;|&nbsp; Culturally Sensitive Counselor
+                Counselling Psychologist | Psychotherapist
               </p>
 
               {/* ── Section 1: Namaste ── */}
@@ -225,7 +225,7 @@ export default function AboutPage() {
                 </h3>
 
                 <p style={{ fontFamily: 'var(--font-sans)', fontSize: '1rem', lineHeight: 1.8, color: 'var(--soft-charcoal)', marginBottom: '1rem' }}>
-                  Namaste! Vannakam! I&apos;m Mahima Tirunelveli Santhakumar, and I founded Sankalpa Counseling with a deep belief that everyone deserves access to compassionate, culturally sensitive mental health support.
+                  I&apos;m Mahima Tirunelveli Santhakumar, and I founded Sankalpa Counseling with a deep belief that everyone deserves access to compassionate, culturally sensitive mental health support.
                 </p>
                 <p style={{ fontFamily: 'var(--font-sans)', fontSize: '1rem', lineHeight: 1.8, color: 'var(--soft-charcoal)', marginBottom: '1rem' }}>
                   The word &ldquo;Sankalpa&rdquo; comes from Sanskrit, meaning a heartfelt intention or resolve &mdash; a commitment to positive change.

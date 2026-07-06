@@ -17,7 +17,7 @@ export default function Footer({ settings }: FooterProps) {
                     <h3>{settings?.title || "Sankalpa Counseling"}</h3>
                     <p className="mb-4">{settings?.description || "Cultivating emotional wellness and therapeutic healing in a safe, warm environment."}</p>
                     <address style={{ fontStyle: 'normal' }}>
-                        <p>Chennai, Tamil Nadu<br />India</p>
+                        <p>Virtual Counseling Available Across India<br />Providing secure online counseling sessions for clients throughout India.</p>
                     </address>
                 </div>
 
@@ -52,7 +52,6 @@ export default function Footer({ settings }: FooterProps) {
                                 <>
                                     <Link href="#" className="nav-link">Instagram</Link>
                                     <Link href="#" className="nav-link">LinkedIn</Link>
-                                    <Link href="#" className="nav-link">Twitter</Link>
                                 </>
                             )}
                     </div>
