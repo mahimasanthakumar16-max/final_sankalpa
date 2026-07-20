@@ -52,7 +52,7 @@ export default async function FeesPage() {
         {
             id: 'couples',
             title: 'Couples Counseling',
-            duration: '50–60 minutes',
+            duration: '50 minutes',
             description: 'Sessions designed to strengthen communication, rebuild trust, and foster emotional connection.',
             price: '₹2,000 / session',
             icon: Users
@@ -100,6 +100,7 @@ export default async function FeesPage() {
                         {fees.slice(0, 3).map((f) => {
                             const Icon = f.icon || Info;
                             const isIndividual = f.id === 'individual';
+                            const isCouples = f.id === 'couples';
                             return (
                                 <article key={f.id} className="fee-card card">
                                     <div className="fee-card-top">
@@ -114,7 +115,7 @@ export default async function FeesPage() {
                                         )}
                                     </div>
                                     <h3 className="fee-title">{f.title}</h3>
-                                    <p className="fee-duration">{isIndividual ? '50 minutes' : f.duration}</p>
+                                    <p className="fee-duration">{isIndividual || isCouples ? '50 minutes' : f.duration}</p>
                                     <p className="fee-desc">{f.description}</p>
                                     <div style={{ marginTop: 'auto' }}>
                                         <div className="fee-price">{f.price}</div>
@@ -130,6 +131,7 @@ export default async function FeesPage() {
                         {fees.slice(3).map((f) => {
                             const Icon = f.icon || Info;
                             const isIndividual = f.id === 'individual';
+                            const isCouples = f.id === 'couples';
                             return (
                                 <article key={f.id} className="fee-card card">
                                     <div className="fee-card-top">
@@ -144,7 +146,7 @@ export default async function FeesPage() {
                                         )}
                                     </div>
                                     <h3 className="fee-title">{f.title}</h3>
-                                    <p className="fee-duration">{isIndividual ? '50 minutes' : f.duration}</p>
+                                    <p className="fee-duration">{isIndividual || isCouples ? '50 minutes' : f.duration}</p>
                                     <p className="fee-desc">{f.description}</p>
                                     <div style={{ marginTop: 'auto' }}>
                                         <div className="fee-price">{f.price}</div>
