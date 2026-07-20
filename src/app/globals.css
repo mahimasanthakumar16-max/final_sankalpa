@@ -2601,7 +2601,7 @@ a {
 }
 
 .fees-row-top {
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .fees-row-bottom {
@@ -2611,13 +2611,15 @@ a {
 .fee-card {
   display: flex;
   flex-direction: column;
+  align-self: stretch;
   padding: 32px;
-  border-radius: 28px;
-  border: 1px solid rgba(125, 145, 130, 0.08);
-  background: linear-gradient(180deg, #FFFFFF 0%, rgba(247,244,238,0.6) 100%);
+  border-radius: 24px;
+  border: 1px solid rgba(125, 145, 130, 0.22);
+  background: var(--surface-cream);
   min-height: 420px;
-  width: 340px; /* comfortable midpoint between 320-360 */
-  box-shadow: 0 18px 40px rgba(74,74,74,0.06);
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 12px 32px rgba(125, 145, 130, 0.12);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
@@ -2721,11 +2723,16 @@ a {
 .fee-card {
   display: flex;
   flex-direction: column;
-  padding: 2rem;
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(125, 145, 130, 0.08);
-  background: linear-gradient(180deg, #FFFFFF 0%, rgba(247,244,238,0.6) 100%);
-  min-height: 340px;
+  align-self: stretch;
+  padding: 32px;
+  border-radius: 24px;
+  border: 1px solid rgba(125, 145, 130, 0.22);
+  background: var(--surface-cream);
+  min-height: 420px;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 12px 32px rgba(125, 145, 130, 0.12);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .fee-card-top {
