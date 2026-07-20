@@ -14,7 +14,7 @@ export default async function FAQPage() {
         {
             _id: '1',
             question: "What can I expect in the first session?",
-            answer: "The first session is a free initial consultation. We will get to know each other, I will ask about your history, what brings you to therapy now, and what you hope to achieve. It's also an opportunity for you to see how I work and ask any questions you might have."
+            answer: "The first session is an opportunity for us to get to know each other. I will ask about your history, what brings you to therapy now, and what you hope to achieve. It's also an opportunity for you to see how I work and ask any questions you might have."
         },
         {
             _id: '2',
