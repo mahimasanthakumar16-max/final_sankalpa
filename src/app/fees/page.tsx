@@ -44,10 +44,9 @@ export default async function FeesPage() {
         {
             id: 'individual',
             title: 'Individual Counseling',
-            duration: '50–60 minutes',
+            duration: '50 minutes',
             description: 'Dedicated one-on-one therapy sessions focused on personal growth, emotional wellbeing, and healing.',
             price: '₹1,500 / session',
-            badge: 'Most Popular',
             icon: HeartHandshake
         },
         {
@@ -100,14 +99,22 @@ export default async function FeesPage() {
                     <div className="fees-row fees-row-top">
                         {fees.slice(0, 3).map((f) => {
                             const Icon = f.icon || Info;
+                            const isIndividual = f.id === 'individual';
                             return (
                                 <article key={f.id} className="fee-card card">
                                     <div className="fee-card-top">
                                         <div className="fee-icon"><Icon size={28} color="var(--eucalyptus-green)" /></div>
-                                        {f.badge && <div className="fee-badge">{f.badge}</div>}
+                                        {isIndividual ? (
+                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.25rem' }}>
+                                                <span className="fee-badge" style={{ whiteSpace: 'nowrap' }}>Trauma Counseling</span>
+                                                <span className="fee-badge" style={{ whiteSpace: 'nowrap' }}>Adolescent Counseling</span>
+                                            </div>
+                                        ) : (
+                                            f.badge && <div className="fee-badge">{f.badge}</div>
+                                        )}
                                     </div>
                                     <h3 className="fee-title">{f.title}</h3>
-                                    <p className="fee-duration">{f.duration}</p>
+                                    <p className="fee-duration">{isIndividual ? '50 minutes' : f.duration}</p>
                                     <p className="fee-desc">{f.description}</p>
                                     <div style={{ marginTop: 'auto' }}>
                                         <div className="fee-price">{f.price}</div>
@@ -122,14 +129,22 @@ export default async function FeesPage() {
                     <div className="fees-row fees-row-bottom">
                         {fees.slice(3).map((f) => {
                             const Icon = f.icon || Info;
+                            const isIndividual = f.id === 'individual';
                             return (
                                 <article key={f.id} className="fee-card card">
                                     <div className="fee-card-top">
                                         <div className="fee-icon"><Icon size={28} color="var(--eucalyptus-green)" /></div>
-                                        {f.badge && <div className="fee-badge">{f.badge}</div>}
+                                        {isIndividual ? (
+                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.25rem' }}>
+                                                <span className="fee-badge" style={{ whiteSpace: 'nowrap' }}>Trauma Counseling</span>
+                                                <span className="fee-badge" style={{ whiteSpace: 'nowrap' }}>Adolescent Counseling</span>
+                                            </div>
+                                        ) : (
+                                            f.badge && <div className="fee-badge">{f.badge}</div>
+                                        )}
                                     </div>
                                     <h3 className="fee-title">{f.title}</h3>
-                                    <p className="fee-duration">{f.duration}</p>
+                                    <p className="fee-duration">{isIndividual ? '50 minutes' : f.duration}</p>
                                     <p className="fee-desc">{f.description}</p>
                                     <div style={{ marginTop: 'auto' }}>
                                         <div className="fee-price">{f.price}</div>
