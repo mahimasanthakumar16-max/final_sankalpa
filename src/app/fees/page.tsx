@@ -156,28 +156,6 @@ export default async function FeesPage() {
                             <p>For online sessions, payment must be completed before the session begins.</p>
                             <p>As virtual counseling is currently being offered, payment should be completed before the scheduled appointment.</p>
                         </div>
-
-                        <div className="policy-card">
-                            <div className="flex items-center gap-4 mb-4">
-                                <Info color="var(--eucalyptus-green)" />
-                                <h3 style={{ margin: 0 }}>Insurance</h3>
-                            </div>
-                            <p>I am not currently on insurance panels.</p>
-                            <p>However, I can provide a receipt/superbill if you wish to seek reimbursement from your insurance provider.</p>
-                            <p>Please check with your insurance company regarding out-of-network mental health benefits.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section className="section section-bg-white">
-                <div className="container">
-                    <div className="card flex" style={{ flexDirection: 'row', alignItems: 'center', gap: '2rem', padding: '2rem', backgroundColor: 'var(--warm-cream)' }}>
-                        <Info size={48} color="var(--eucalyptus-green)" />
-                        <div>
-                            <h3 className="mb-2">A Note on Insurance</h3>
-                            <p style={{ marginBottom: 0 }}>While we do not currently bill insurance providers directly, we can provide you with a monthly &quot;superbill&quot; (itemized receipt) that you may submit to your insurance company for potential out-of-network reimbursement. Please check with your provider regarding their mental health benefits.</p>
-                        </div>
                     </div>
                 </div>
             </section>
