@@ -121,7 +121,7 @@ export default async function FeesPage() {
                                     <div style={{ marginTop: 'auto' }}>
                                         <div className="fee-price">{f.price}</div>
                                         {f.note && <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#6B7280', marginBottom: '0.5rem' }}>{f.note}</p>}
-                                        <Link href="/contact" className="btn btn-outline" style={{ marginTop: '1rem' }}>Book / Enquire</Link>
+                                        <Link href="/booking" className="btn btn-outline" style={{ marginTop: '1rem' }}>Book Consultation</Link>
                                     </div>
                                 </article>
                             );
@@ -153,7 +153,7 @@ export default async function FeesPage() {
                                     <div style={{ marginTop: 'auto' }}>
                                         <div className="fee-price">{f.price}</div>
                                         {f.note && <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#6B7280', marginBottom: '0.5rem' }}>{f.note}</p>}
-                                        <Link href="/contact" className="btn btn-outline" style={{ marginTop: '1rem' }}>Book / Enquire</Link>
+                                        <Link href="/booking" className="btn btn-outline" style={{ marginTop: '1rem' }}>Book Consultation</Link>
                                     </div>
                                 </article>
                             );
