@@ -1,6 +1,7 @@
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
+import { codeInput } from '@sanity/code-input'
 import { projectId, dataset } from './src/sanity/env'
 import blockContent from './src/sanity/schemas/blockContent'
 import service from './src/sanity/schemas/service'
@@ -36,5 +37,6 @@ export default defineConfig({
     plugins: [
         structureTool(),
         visionTool(),
+        codeInput(),
     ],
 })

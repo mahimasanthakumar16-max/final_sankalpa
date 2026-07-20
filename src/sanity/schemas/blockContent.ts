@@ -14,11 +14,17 @@ export default {
                 { title: 'H4', value: 'h4' },
                 { title: 'Quote', value: 'blockquote' },
             ],
-            lists: [{ title: 'Bullet', value: 'bullet' }],
+            lists: [
+                { title: 'Bullet', value: 'bullet' },
+                { title: 'Numbered', value: 'number' },
+            ],
             marks: {
                 decorators: [
                     { title: 'Strong', value: 'strong' },
                     { title: 'Emphasis', value: 'em' },
+                    { title: 'Underline', value: 'underline' },
+                    { title: 'Strike', value: 'strike-through' },
+                    { title: 'Code', value: 'code' },
                 ],
                 annotations: [
                     {
@@ -39,6 +45,32 @@ export default {
         {
             type: 'image',
             options: { hotspot: true },
+            fields: [
+                {
+                    name: 'alt',
+                    type: 'string',
+                    title: 'Alternative text',
+                },
+                {
+                    name: 'caption',
+                    type: 'string',
+                    title: 'Caption',
+                },
+            ],
+        },
+        {
+            title: 'Code Block',
+            type: 'code',
+            options: {
+                language: 'javascript',
+                languageAlternatives: [
+                    { title: 'JavaScript', value: 'javascript' },
+                    { title: 'TypeScript', value: 'typescript' },
+                    { title: 'HTML', value: 'html' },
+                    { title: 'CSS', value: 'css' },
+                ],
+                withFilename: false,
+            },
         },
     ],
 }

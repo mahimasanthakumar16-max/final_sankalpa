@@ -141,17 +141,17 @@ export default async function Home() {
           <div className="about-content">
             <span className="section-tag" style={{ backgroundColor: 'rgba(125,145,130,0.1)', color: 'var(--soft-charcoal)' }}>ABOUT SANKALPA COUNSELING</span>
             <h2 className="about-heading">
-              A Space for Healing, <span style={{ fontStyle: 'italic', color: 'var(--warm-terracotta)' }}>Reflection</span> &amp; Growth
+              A Space for Healing, <span style={{ fontStyle: 'italic', color: 'var(--warm-terracotta)' }}>Reflection</span>{" "}&amp; Growth
             </h2>
             <div className="about-copy">
               <p>
-                Welcome to Sankalpa Counseling. I'm Mahima Tirunelveli Santhakumar, a licensed psychotherapist dedicated to creating a warm, non‑judgmental space where healing can unfold naturally.
+                Welcome to Sankalpa Counseling. I’m Mahima Tirunelveli Santhakumar, a psychotherapist dedicated to creating a warm, non-judgmental space where healing can unfold naturally.
               </p>
               <p>
-                The Sanskrit word “Sankalpa” means intention — a heartfelt resolve towards healing and growth. This philosophy guides every therapeutic relationship we build together.
+                The Sanskrit word “Sankalpa” means a heartfelt resolve. I hope that any therapeutic relationship we build together starts with a heartfelt resolve towards healing and growth.
               </p>
               <p>
-                I specialize in trauma‑informed care, anxiety, depression, life transitions, and disordered eating, to name a few. I work with youth, adults, and couples, supporting each age group through their unique challenges.
+                I specialize in trauma-informed care, anxiety, depression, life transitions, and disordered eating, to name a few. I work with youth, adults, and couples, supporting each group through their unique challenges.
               </p>
             </div>
             <ul className="about-list">
@@ -278,7 +278,7 @@ export default async function Home() {
               <Users color="var(--eucalyptus-green)" size={32} />
               <h3 style={{ fontSize: 'clamp(1.25rem, 2vw, 1.5rem)', marginBottom: 0 }}>Couples Counseling</h3>
               <p style={{ fontSize: '1rem', margin: 0, lineHeight: 1.7 }}>
-                Restoring communication and intimacy through guided, compassionate collaborative work.
+                Restoring communication and intimacy through guided, collaborative work.
               </p>
               <Link href="/services#couples" className="btn btn-secondary" style={{ marginTop: 'auto', fontSize: '0.9rem', padding: '0.75rem 1.5rem' }}>
                 Explore →
@@ -369,8 +369,8 @@ export default async function Home() {
                 border: '1px solid rgba(0,0,0,0.03)',
                 boxShadow: '0 4px 20px rgba(0,0,0,0.02)'
               }}>
-                <div style={{ color: 'var(--sand-beige)', fontSize: '3rem', fontFamily: 'var(--font-serif)', lineHeight: 1, marginBottom: '1.5rem' }}>{item.step}</div>
-                <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--eucalyptus-green)' }}>{item.title}</h3>
+                <div style={{ color: '#B78A62', fontSize: '3rem', fontFamily: 'var(--font-serif)', lineHeight: 1, marginBottom: '1.5rem' }}>{item.step}</div>
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: '#6E8675' }}>{item.title}</h3>
                 <p style={{ fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>{item.desc}</p>
               </div>
             ))}

@@ -68,7 +68,7 @@ export const faqsQuery = groq`*[_type == "faq"]{
   category
 }`
 
-export const blogPostsQuery = groq`*[_type == "post"] | order(publishedAt desc) {
+export const blogPostsQuery = groq`*[_type == "post" && status == "published"] | order(publishedAt desc) {
   _id,
   title,
   "slug": slug.current,
@@ -78,7 +78,8 @@ export const blogPostsQuery = groq`*[_type == "post"] | order(publishedAt desc) 
   readingTime,
   featured,
   "mainImage": mainImage.asset->url,
-  "categories": categories[]->title
+  "categories": categories[]->title,
+  tags
 }`
 
 export const blogPostBySlugQuery = groq`*[_type == "post" && slug.current == $slug][0]{
@@ -92,8 +93,30 @@ export const blogPostBySlugQuery = groq`*[_type == "post" && slug.current == $sl
   featured,
   "mainImage": mainImage.asset->url,
   "categories": categories[]->title,
+  tags,
   body,
+  gallery[]{
+    "url": asset->url,
+    alt,
+    caption
+  },
+  downloads[]{
+    title,
+    "url": file.asset->url,
+    description
+  },
   seo
+}`
+
+export const relatedPostsQuery = groq`*[_type == "post" && status == "published" && _id != $id && count(categories[@._ref in $categoryIds]) > 0] | order(publishedAt desc) [0...3]{
+  _id,
+  title,
+  "slug": slug.current,
+  excerpt,
+  "mainImage": mainImage.asset->url,
+  publishedAt,
+  readingTime,
+  "categories": categories[]->title
 }`
 
 

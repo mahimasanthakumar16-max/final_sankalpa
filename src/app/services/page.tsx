@@ -12,7 +12,6 @@ interface ServiceItem {
     title: string;
     description: string;
     idealFor: string[];
-    duration: string;
     icon: typeof HeartHandshake;
     subtitle?: string;
 }
@@ -24,7 +23,6 @@ export default function ServicesPage() {
             title: 'Individual Counseling',
             description: 'Dedicated 50-minute sessions focused entirely on your personal growth, healing, and skill-building in a deeply confidential environment.',
             idealFor: ['Anxiety', 'Depression', 'Life transitions', 'Identity exploration', 'Emotional regulation', 'Stress management'],
-            duration: '50 minutes',
             icon: HeartHandshake,
         },
         {
@@ -32,7 +30,6 @@ export default function ServicesPage() {
             title: 'Couples Counseling',
             description: 'Sessions designed to help partners strengthen communication, rebuild trust, navigate conflict, and foster deeper emotional connection in their relationship.',
             idealFor: ['Communication challenges', 'Conflict resolution', 'Trust rebuilding', 'Relationship strengthening', 'Emotional connection'],
-            duration: '50 minutes',
             icon: Sparkles,
         },
         {
@@ -41,7 +38,6 @@ export default function ServicesPage() {
             subtitle: 'EMDR • TF-CBT • Narrative Exposure Therapy',
             description: 'Specialized treatment focused on helping clients process difficult experiences, reduce the impact of trauma, and move toward healing, resilience, and renewed wellbeing.',
             idealFor: ['Childhood trauma', 'PTSD', 'Emotional distress', 'Difficult life experiences', 'Trauma recovery'],
-            duration: '50-90 minutes',
             icon: ShieldCheck,
         },
         {
@@ -49,7 +45,6 @@ export default function ServicesPage() {
             title: 'Adolescent Counseling',
             description: 'Supportive counseling designed specifically for adolescents navigating emotional, social, academic, family, and developmental challenges. Sessions provide a safe, compassionate, and non-judgmental space where young people can build resilience, develop healthy coping skills, and strengthen emotional wellbeing.',
             idealFor: ['Academic Stress', 'Anxiety', 'Depression', 'Identity Exploration', 'Family Challenges', 'Emotional Regulation', 'Self-Esteem', 'Life Transitions'],
-            duration: '50–60 Minutes',
             icon: Heart,
         },
     ];
@@ -147,7 +142,6 @@ export default function ServicesPage() {
                                 description={service.description}
                                 subtitle={service.subtitle}
                                 idealFor={service.idealFor}
-                                duration={service.duration}
                                 icon={service.icon}
                             />
                         ))}

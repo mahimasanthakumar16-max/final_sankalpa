@@ -131,8 +131,8 @@ export default function AboutPage() {
                 {/* Education */}
                 <div style={{ marginBottom: '1.75rem' }}>
                   {[
-                    { icon: '🎓', title: 'BSc in Psychology', sub: 'University of Toronto' },
-                    { icon: '🎓', title: 'MA in Counseling Psychology', sub: 'University of Denver' },
+                    { icon: '🎓', title: 'BSc in Psychology', sub: 'University of Toronto (Canada)' },
+                    { icon: '🎓', title: 'MA in Counseling Psychology', sub: 'University of Denver (USA)' },
                     { icon: '🪪', title: 'Licensed Professional Counselor Candidate', sub: 'Colorado USA (LPCC.0023442)' },
                   ].map((item, i) => (
                     <div key={i} style={{
@@ -228,10 +228,10 @@ export default function AboutPage() {
                   I&apos;m Mahima Tirunelveli Santhakumar, and I founded Sankalpa Counseling with a deep belief that everyone deserves access to compassionate, culturally sensitive mental health support.
                 </p>
                 <p style={{ fontFamily: 'var(--font-sans)', fontSize: '1rem', lineHeight: 1.8, color: 'var(--soft-charcoal)', marginBottom: '1rem' }}>
-                  The word &ldquo;Sankalpa&rdquo; comes from Sanskrit, meaning a heartfelt intention or resolve &mdash; a commitment to positive change.
+                  The word &ldquo;Sankalpa&rdquo; comes from Sanskrit, meaning a heartfelt intention or resolve. It represents a sacred determination to unite your thoughts, words, and actions toward your true purpose.
                 </p>
                 <p style={{ fontFamily: 'var(--font-sans)', fontSize: '1rem', lineHeight: 1.8, color: 'var(--soft-charcoal)', marginBottom: '1rem' }}>
-                  Guided by this philosophy, I bring to my work the hope that we can all work towards living our lives in alignment with our intentions and values and the belief that everyone has the capacity for healing, growth, and transformation within themselves.
+                  I bring to my work the hope that we can all work towards living our lives in alignment with our intentions and values and the belief that everyone has the capacity for healing, growth, and transformation within themselves.
                 </p>
                 <p style={{ fontFamily: 'var(--font-sans)', fontSize: '1rem', lineHeight: 1.8, color: 'var(--soft-charcoal)' }}>
                   I hope you will give me the honor of walking alongside you on your journey.
@@ -357,14 +357,12 @@ export default function AboutPage() {
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem' }}>
                   {[
                     'Trauma-Informed Care',
-                    'Anxiety Support',
-                    'Depression Support',
+                    'Anxiety',
+                    'Depression',
                     'Life Transitions',
                     'Identity Exploration',
-                    'Disordered Eating Support',
-                    'Adolescents',
-                    'Adults',
-                    'Couples',
+                    'Disordered Eating',
+                    'Neurodivergence',
                   ].map((spec, i) => (
                     <span key={i} style={{
                       display: 'inline-flex',

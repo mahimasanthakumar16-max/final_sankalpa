@@ -21,7 +21,7 @@ const therapyTypes: TherapyType[] = [
         id: 'emdr',
         title: 'Eye Movement Desensitization and Reprocessing (EMDR)',
         description: 'A powerful trauma therapy that processes painful memories and reduces their emotional charge.',
-        fullContent: 'EMDR uses bilateral stimulation (eye movements, taps, or sounds) to help your brain process traumatic memories in a safe way. This evidence-based therapy is highly effective for PTSD, anxiety, and trauma recovery.'
+        fullContent: 'EMDR uses bilateral stimulation (eye movements, taps, or sounds) to help your brain process traumatic memories in a safe way. This evidence-based therapy is highly effective for post-traumatic stress disorder (PTSD), anxiety, and trauma recovery.'
     },
     {
         id: 'gottman',

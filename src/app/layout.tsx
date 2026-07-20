@@ -14,6 +14,11 @@ export async function generateMetadata(): Promise<Metadata> {
       title: settings?.seo?.metaTitle || settings?.title || "Sankalpa Counseling | Premium Psychotherapy & Counseling in Tamil Nadu",
       description: settings?.seo?.metaDescription || settings?.description || "A premium modern therapy private practice providing emotionally safe, calming, and professional psychotherapy and counseling.",
       keywords: settings?.seo?.keywords?.join(", ") || "therapy, counseling, psychotherapy, mental health, Tamil Nadu, emotional wellness, Sankalpa Counseling",
+      icons: {
+        icon: "/images/logo.png",
+        shortcut: "/images/logo.png",
+        apple: "/images/logo.png"
+      },
       openGraph: {
         images: settings?.seo?.ogImage ? [settings.seo.ogImage] : [],
       },
@@ -23,6 +28,11 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: "Sankalpa Counseling | Premium Psychotherapy & Counseling in Tamil Nadu",
       description: "A premium modern therapy private practice providing emotionally safe, calming, and professional psychotherapy and counseling.",
+      icons: {
+        icon: "/images/logo.png",
+        shortcut: "/images/logo.png",
+        apple: "/images/logo.png"
+      },
     };
   }
 }
