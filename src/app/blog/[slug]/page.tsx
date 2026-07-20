@@ -10,9 +10,8 @@ import {
     ArrowRight,
     Image as ImageIcon,
     FileText,
-    Twitter,
-    Facebook,
-    Linkedin
+    Globe,
+    ExternalLink
 } from 'lucide-react';
 import { safeFetch } from '@/sanity/lib/client';
 import { blogPostBySlugQuery, blogPostsQuery, relatedPostsQuery } from '@/sanity/lib/queries';
@@ -266,7 +265,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                                     e.currentTarget.style.backgroundColor = '#f0f7f2';
                                 }}
                             >
-                                <Twitter size={16} /> Twitter
+                                <Share2 size={16} /> Twitter
                             </a>
                             <a
                                 href="#"
@@ -289,7 +288,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                                     e.currentTarget.style.backgroundColor = '#f0f7f2';
                                 }}
                             >
-                                <Facebook size={16} /> Facebook
+                                <Globe size={16} /> Facebook
                             </a>
                             <a
                                 href="#"
@@ -312,7 +311,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                                     e.currentTarget.style.backgroundColor = '#f0f7f2';
                                 }}
                             >
-                                <Linkedin size={16} /> LinkedIn
+                                <ExternalLink size={16} /> LinkedIn
                             </a>
                         </div>
                     </div>
