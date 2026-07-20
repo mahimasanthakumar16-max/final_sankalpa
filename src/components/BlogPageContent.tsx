@@ -1,26 +1,29 @@
-"use client";
-
-import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, BookOpen, Heart, FileText, CheckCircle } from 'lucide-react';
+import { ArrowRight, Calendar, Clock, BookOpen } from 'lucide-react';
+import { safeFetch } from '@/sanity/lib/client';
+import { blogPostsQuery } from '@/sanity/lib/queries';
+import { formatPublishDate } from '@/lib/blog';
+import ClientBlogPage from './ClientBlogPage';
 
 const RESOURCES = [
     {
-        icon: BookOpen,
+        icon: 'BookOpen',
         title: "Anxiety Coping Skills",
         desc: "Practical strategies and exercises to help manage anxiety and build healthier coping habits.",
         buttonText: "Download Worksheet",
-        comingSoon: false
+        comingSoon: false,
+        downloadLink: "/resources/coping-skills-anxiety-standard-english.pdf"
     },
     {
-        icon: Heart,
+        icon: 'Heart',
         title: "Grounding Exercises",
         desc: "Simple grounding techniques to help reduce anxiety, manage overwhelming emotions, and reconnect with the present moment.",
         buttonText: "Download Worksheet",
-        comingSoon: false
+        comingSoon: false,
+        downloadLink: "/resources/grounding-techniques-standard-english.pdf"
     },
     {
-        icon: FileText,
+        icon: 'FileText',
         title: "Self-Reflection Prompts",
         desc: "A collection of thoughtful journal prompts to encourage self-awareness, personal growth, and emotional reflection.",
         buttonText: "View Prompts",
@@ -28,21 +31,22 @@ const RESOURCES = [
         isPrompts: true
     },
     {
-        icon: CheckCircle,
+        icon: 'CheckCircle',
         title: "Emotion Regulation Skills",
         desc: "Evidence-based skills to better understand, regulate, and respond to emotions in healthier ways.",
         buttonText: "Download Worksheet",
-        comingSoon: false
+        comingSoon: false,
+        downloadLink: "/resources/dbt-emotion-regulation-skills-standard-english.pdf"
     },
     {
-        icon: FileText,
+        icon: 'FileText',
         title: "Daily Wellness Checklist",
         desc: "A practical daily checklist to support healthy routines and emotional wellbeing.",
         buttonText: "Coming Soon",
         comingSoon: true
     },
     {
-        icon: BookOpen,
+        icon: 'BookOpen',
         title: "Mental Health Resources",
         desc: "A curated collection of trusted mental health resources, crisis supports, and recommended reading.",
         buttonText: "Coming Soon",
@@ -74,8 +78,8 @@ const SELF_REFLECTION_PROMPTS = [
     "What do I want my life to look like in five or ten years?"
 ];
 
-export default function BlogPageContent() {
-    const [showPrompts, setShowPrompts] = useState(false);
+export default async function BlogPageContent() {
+    const posts = await safeFetch(blogPostsQuery);
 
     return (
         <>
@@ -92,7 +96,7 @@ export default function BlogPageContent() {
                 </svg>
                 <div className="container">
                     <span className="blog-hero-label">Reflections & Resources</span>
-                    <h1>A Space for Reflection, Growth & Healing</h1>
+                    <h1>The Wellness Journal</h1>
                     <p>
                         Thoughtful articles, reflections, and resources designed to support emotional wellbeing, 
                         self-understanding, and personal growth.
@@ -100,126 +104,99 @@ export default function BlogPageContent() {
                 </div>
             </section>
 
-            {/* Blog Posts Coming Soon Section */}
+            {/* Blog Posts Section */}
             <section className="section featured-editorial-section">
                 <div className="container">
                     <div className="journal-section-intro text-center">
                         <span className="blog-hero-label">Blog Posts</span>
-                        <h2>Coming Soon</h2>
-                        <p style={{ color: '#6B7280', fontSize: '1rem', marginTop: '0.5rem' }}>
-                            New articles on mental health, emotional wellbeing, relationships, trauma recovery, mindfulness, and personal growth will be published here soon.
-                        </p>
+                        <h2>Latest Articles</h2>
                     </div>
-                    <div style={{ 
-                        display: 'flex', 
-                        justifyContent: 'center', 
-                        marginTop: '2rem',
-                        padding: '3rem',
-                        backgroundColor: 'var(--surface-sage)',
-                        borderRadius: 'var(--radius-lg)',
-                        border: '1px solid rgba(168,181,162,0.3)'
-                    }}>
-                        <BookOpen size={64} color="#7D9182" />
-                    </div>
-                </div>
-            </section>
-
-            {/* Resource Library */}
-            <section className="section resource-library-section">
-                <div className="container">
-                    <div className="journal-section-intro text-center">
-                        <span className="blog-hero-label">Wellness Library</span>
-                        <h2>Resource Library</h2>
-                        <p style={{ color: '#6B7280', fontSize: '1rem', marginTop: '0.5rem' }}>
-                            Practical tools, grounding sheets, and guides designed for your healing journey.
-                        </p>
-                    </div>
-
-                    <div className="resource-grid">
-                        {RESOURCES.map((res, idx) => (
-                            <div key={idx} className="resource-editorial-card">
-                                {res.comingSoon && <span className="resource-type" style={{ color: 'var(--warm-terracotta)' }}>Coming Soon</span>}
-                                <div className="resource-icon-wrap" style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    borderRadius: 'var(--radius-md)',
-                                    backgroundColor: 'rgba(168, 181, 162, 0.1)',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    marginBottom: '1rem'
-                                }}>
-                                    <res.icon size={24} color="#7D9182" />
-                                </div>
-                                <h3>{res.title}</h3>
-                                <p className="resource-desc">{res.desc}</p>
-                                {res.isPrompts ? (
-                                    <button
-                                        type="button"
-                                        className="resource-action-link"
-                                        style={{ border: 'none', background: 'none', cursor: 'pointer', fontFamily: 'var(--font-sans)', fontSize: '1rem', color: 'var(--eucalyptus-green)', fontWeight: 500 }}
-                                        onClick={() => setShowPrompts(!showPrompts)}
-                                    >
-                                        {showPrompts ? "Hide Prompts" : "View Prompts"} <ArrowRight size={14} style={{ transform: showPrompts ? 'rotate(180deg)' : 'rotate(0)' }} />
-                                    </button>
-                                ) : (
-                                    <span className="resource-action-link" style={{ opacity: res.comingSoon ? 0.5 : 1, pointerEvents: res.comingSoon ? 'none' : 'auto' }}>
-                                        {res.buttonText} <ArrowRight size={14} />
-                                    </span>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Self-Reflection Prompts Expandable Section */}
-                    {showPrompts && (
-                        <div style={{ marginTop: '3rem', padding: '2.5rem', backgroundColor: 'var(--surface-sage)', borderRadius: 'var(--radius-lg)', border: '1px solid rgba(168, 181, 162, 0.3)' }}>
-                            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', marginBottom: '1.5rem', color: 'var(--soft-charcoal)' }}>
-                                Self-Reflection Prompts
-                            </h3>
-                            <div style={{ display: 'grid', gap: '1rem' }}>
-                                {SELF_REFLECTION_PROMPTS.map((prompt, idx) => (
-                                    <div key={idx} style={{
-                                        padding: '1.25rem',
-                                        backgroundColor: 'white',
-                                        borderRadius: 'var(--radius-md)',
-                                        border: '1px solid rgba(168, 181, 162, 0.2)'
-                                    }}>
-                                        <p style={{ margin: 0, fontFamily: 'var(--font-sans)', color: 'var(--soft-charcoal)', fontSize: '1rem' }}>
-                                            • {prompt}
-                                        </p>
+                    
+                    {!posts || posts.length === 0 ? (
+                        <div style={{ 
+                            display: 'flex', 
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            marginTop: '2rem',
+                            padding: '3rem',
+                            backgroundColor: 'var(--surface-sage)',
+                            borderRadius: 'var(--radius-lg)',
+                            border: '1px solid rgba(168,181,162,0.3)',
+                            textAlign: 'center'
+                        }}>
+                            <BookOpen size={64} color="#7D9182" />
+                            <h2 style={{ marginTop: '1.5rem', marginBottom: '0.5rem', fontSize: '1.75rem' }}>Blog Posts Coming Soon</h2>
+                            <p style={{ color: '#6B7280', fontSize: '1rem', maxWidth: '600px' }}>
+                                New articles on mental health, emotional wellbeing, relationships, trauma recovery, mindfulness, and personal growth will be published here soon.
+                            </p>
+                            <p style={{ color: '#6B7280', fontSize: '0.9rem', marginTop: '1rem' }}>
+                                Check back soon for new resources.
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+                            {posts.map((post: any) => (
+                                <Link key={post._id} href={`/blog/${post.slug}`} className="card group" style={{ textDecoration: 'none' }}>
+                                    {post.mainImage && (
+                                        <div style={{ 
+                                            width: '100%', 
+                                            height: '200px', 
+                                            borderRadius: 'var(--radius-md)', 
+                                            overflow: 'hidden', 
+                                            marginBottom: '1rem' 
+                                        }}>
+                                            <img 
+                                                src={post.mainImage} 
+                                                alt={post.title} 
+                                                style={{ 
+                                                    width: '100%', 
+                                                    height: '100%', 
+                                                    objectFit: 'cover',
+                                                    transition: 'transform 0.3s ease'
+                                                }}
+                                                className="group-hover:scale-105"
+                                            />
+                                        </div>
+                                    )}
+                                    {post.categories && post.categories.length > 0 && (
+                                        <span className="section-tag" style={{ marginBottom: '0.5rem' }}>
+                                            {post.categories[0]}
+                                        </span>
+                                    )}
+                                    <h3 style={{ marginBottom: '0.5rem' }}>{post.title}</h3>
+                                    {post.excerpt && (
+                                        <p style={{ color: '#6B7280', marginBottom: '1rem' }}>{post.excerpt}</p>
+                                    )}
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem', color: '#6B7280', fontSize: '0.875rem' }}>
+                                        {post.author && <span>By {post.author}</span>}
+                                        {post.publishedAt && (
+                                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                                <Calendar size={14} />
+                                                {formatPublishDate(post.publishedAt)}
+                                            </span>
+                                        )}
+                                        {post.readingTime && (
+                                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                                <Clock size={14} />
+                                                {post.readingTime} min read
+                                            </span>
+                                        )}
                                     </div>
-                                ))}
-                            </div>
+                                    <span className="btn btn-secondary" style={{ marginTop: 'auto' }}>
+                                        Read More <ArrowRight size={16} />
+                                    </span>
+                                </Link>
+                            ))}
                         </div>
                     )}
                 </div>
             </section>
 
-            {/* Newsletter */}
-            <section className="section newsletter-editorial-section">
-                <div className="container">
-                    <div className="newsletter-editorial-card">
-                        <h2>Stay Connected</h2>
-                        <p>
-                            Receive occasional reflections, resources, and wellness updates from Sankalpa Counseling directly in your inbox.
-                        </p>
-                        <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
-                            <div className="newsletter-form-row">
-                                <input
-                                    type="email"
-                                    placeholder="Email Address"
-                                    required
-                                    aria-label="Email address"
-                                />
-                                <button type="submit" className="btn btn-primary">
-                                    Subscribe
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </section>
+            {/* Resource Library */}
+            <ClientBlogPage 
+                resources={RESOURCES} 
+                prompts={SELF_REFLECTION_PROMPTS} 
+            />
         </>
     );
 }
