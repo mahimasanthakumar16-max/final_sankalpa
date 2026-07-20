@@ -131,11 +131,7 @@ export default async function FeesPage() {
                     <div className="fees-note">
                         <p><em>Fees may be revised periodically. Existing clients will be given advance notice of any changes.</em></p>
                     </div>
-                </div>
-            </section>
 
-            <section className="section section-bg-white">
-                <div className="container">
                     <div className="policy-grid">
                         <div className="policy-card">
                             <div className="flex items-center gap-4 mb-4">
