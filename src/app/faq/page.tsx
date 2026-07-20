@@ -19,7 +19,7 @@ export default async function FAQPage() {
         {
             _id: '2',
             question: "How long does each session last?",
-            answer: "A standard individual session lasts 50 minutes. This is often referred to as a 'therapeutic hour.' Couples sessions are typically 75 minutes to allow enough time for both partners to be heard."
+            answer: "A standard individual session lasts 50 minutes. This is often referred to as a 'therapeutic hour'. Couples sessions are also typically 50 minutes, but some couples find that they might benefit from longer sessions to allow enough time for both partners to be heard. In that case you are welcome to request extended sessions."
         },
         {
             _id: '3',
