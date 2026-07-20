@@ -24,7 +24,7 @@ export default async function FAQPage() {
         {
             _id: '3',
             question: "Do you offer online or in-person sessions?",
-            answer: "Currently, all counseling sessions are offered virtually to provide accessible and flexible support for clients across India.\n\nYou can choose between:\n\n• Virtual (Video Call)\n• Phone Call\n\nIn-person counseling sessions will be available soon. Updates will be shared once this service becomes available."
+            answer: "Currently, all counseling sessions are offered virtually to provide accessible and flexible support for clients across India. Virtual sessions will be conducted via video call as having face to face communication is an important part of therapy. That being said, phone calls may occasionally be requested if you are facing any challenges in your daily life that requires it. However, please be aware that it will not be possible to provide counseling purely through phone calls, and your first session cannot be conducted via phone call."
         },
         {
             _id: '4',
