@@ -47,11 +47,6 @@ export default async function FAQPage() {
             answer: "Please provide at least 24 hours notice if you need to cancel or reschedule. Late cancellations or no-shows may be charged the full session fee. I understand emergencies happen — please communicate with me and we'll work something out."
         },
         {
-            _id: '8',
-            question: "Do you accept insurance?",
-            answer: "I am not currently on insurance panels. However, I can provide a receipt/superbill if you wish to seek reimbursement from your insurance provider. Please check with your insurance company regarding out-of-network mental health benefits."
-        },
-        {
             _id: '9',
             question: "What languages do you offer counseling in?",
             answer: "Counseling services are available in both English and Tamil to help clients feel comfortable expressing themselves in the language they prefer."
