@@ -2592,33 +2592,24 @@ a {
   padding: 0 clamp(1rem, 5vw, 2rem);
 }
 
-.fees-row {
-  display: flex;
-  gap: 32px;
-  justify-content: center;
+.fees-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
   align-items: stretch;
-  margin-bottom: 32px;
-}
-
-.fees-row-top {
-  justify-content: center;
-}
-
-.fees-row-bottom {
-  justify-content: center;
+  justify-items: center;
 }
 
 .fee-card {
   display: flex;
   flex-direction: column;
-  align-self: stretch;
   padding: 32px;
   border-radius: 24px;
   border: 1px solid rgba(125, 145, 130, 0.22);
   background: var(--surface-cream);
   min-height: 420px;
   width: 100%;
-  max-width: 360px;
+  max-width: 400px;
   box-shadow: 0 12px 32px rgba(125, 145, 130, 0.12);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
@@ -2649,7 +2640,7 @@ a {
   font-weight: 600;
 }
 
-.fee-title { margin-top: 0.5rem; }
+.fee-title { margin-top: 0.5rem; font-size: 32px; line-height: 1.05; }
 .fee-duration { color: var(--eucalyptus-green); font-weight: 600; margin-top: 0.25rem; }
 .fee-price { font-size: 1.5rem; font-weight: 700; color: var(--soft-charcoal); margin: 0.75rem 0; white-space: nowrap; }
 .fee-desc { color: #4A4A4A; line-height: 1.6; margin-top: 8px; }
@@ -2681,17 +2672,15 @@ a {
 
 .fee-card:hover { transform: translateY(-6px); box-shadow: 0 28px 60px rgba(74,74,74,0.08); }
 
-.fee-title { margin-top: 0.5rem; font-size: 32px; line-height: 1.05; }
-
 @media (max-width: 1200px) {
   .fee-title { font-size: 28px; }
-  .fee-card { width: 340px; }
+  .fees-grid { grid-template-columns: repeat(2, 1fr); }
   .policy-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 768px) {
-  .fees-row, .fees-row-top, .fees-row-bottom { flex-direction: column; gap: 24px; align-items: center; }
-  .fee-card { width: 100%; max-width: 720px; min-height: 420px; }
+  .fees-grid { grid-template-columns: 1fr; }
+  .fee-card { max-width: 720px; }
   .fee-title { font-size: 24px; }
   .fees-hero { padding-top: calc(var(--spacing-xl)); padding-bottom: 2rem; }
 }
@@ -2713,94 +2702,7 @@ a {
   font-size: 1.05rem;
 }
 
-.fees-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 1.5rem;
-  align-items: stretch;
-}
 
-.fee-card {
-  display: flex;
-  flex-direction: column;
-  align-self: stretch;
-  padding: 32px;
-  border-radius: 24px;
-  border: 1px solid rgba(125, 145, 130, 0.22);
-  background: var(--surface-cream);
-  min-height: 420px;
-  width: 100%;
-  max-width: 360px;
-  box-shadow: 0 12px 32px rgba(125, 145, 130, 0.12);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.fee-card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 0.8rem;
-}
-
-.fee-icon {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  background: rgba(168, 181, 162, 0.08);
-  border-radius: 12px;
-}
-
-.fee-badge {
-  font-size: 0.75rem;
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--radius-pill);
-  background: rgba(125, 145, 130, 0.08);
-  color: var(--eucalyptus-green);
-  font-weight: 600;
-}
-
-.fee-title { margin-top: 0.5rem; }
-.fee-duration { color: var(--eucalyptus-green); font-weight: 600; margin-top: 0.25rem; }
-.fee-price { font-size: 1.5rem; font-weight: 700; color: var(--soft-charcoal); margin: 0.75rem 0; }
-.fee-desc { color: #4A4A4A; line-height: 1.6; }
-
-.fees-note {
-  margin-top: 1.75rem;
-  padding: 1rem 1.25rem;
-  border-radius: var(--radius-lg);
-  background: rgba(247, 244, 238, 0.95);
-  border: 1px solid rgba(125, 145, 130, 0.08);
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.policy-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
-  margin-top: 2.5rem;
-}
-
-.policy-card {
-  padding: 1.5rem;
-  border-radius: var(--radius-lg);
-  border: 1px solid rgba(125, 145, 130, 0.08);
-  background: var(--surface-cream);
-}
-
-@media (max-width: 1200px) {
-  .fees-grid { grid-template-columns: repeat(3, 1fr); }
-  .policy-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 768px) {
-  .fees-grid { grid-template-columns: 1fr; gap: 1.25rem; }
-  .policy-grid { grid-template-columns: 1fr; }
-  .fees-hero { padding-top: calc(var(--spacing-xl)); padding-bottom: 2rem; }
-}
 
 /* ─── Blog Page Redesign ─── */
 .blog-redesign-hero {

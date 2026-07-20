@@ -96,46 +96,14 @@ export default async function FeesPage() {
 
             <section className="section section-bg-white">
                 <div className="fees-container">
-                    <div className="fees-row fees-row-top">
-                        {fees.slice(0, 3).map((f) => {
+                    <div className="fees-grid">
+                        {fees.map((f) => {
                             const Icon = f.icon || Info;
                             const isIndividual = f.id === 'individual';
                             const isCouples = f.id === 'couples';
                             const isExtended = f.id === 'extended';
                             return (
-                                <article key={f.id} className="fee-card card">
-                                    <div className="fee-card-top">
-                                        <div className="fee-icon"><Icon size={28} color="var(--eucalyptus-green)" /></div>
-                                        {isIndividual ? (
-                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.25rem' }}>
-                                                <span className="fee-badge" style={{ whiteSpace: 'nowrap' }}>Trauma Counseling</span>
-                                                <span className="fee-badge" style={{ whiteSpace: 'nowrap' }}>Adolescent Counseling</span>
-                                            </div>
-                                        ) : (
-                                            f.badge && <div className="fee-badge">{f.badge}</div>
-                                        )}
-                                    </div>
-                                    <h3 className="fee-title">{isExtended ? 'Extended Session' : f.title}</h3>
-                                    <p className="fee-duration">{isIndividual || isCouples ? '50 minutes' : f.duration}</p>
-                                    <p className="fee-desc">{isExtended ? 'Extended sessions for deeper therapeutic processing work. Most commonly requested by people looking to do trauma work like Eye Movement Desensitization Reprocessing (EMDR), but available to anyone who feels like they might benefit from longer sessions.' : f.description}</p>
-                                    <div style={{ marginTop: 'auto' }}>
-                                        <div className="fee-price">{f.price}</div>
-                                        {f.note && <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#6B7280', marginBottom: '0.5rem' }}>{f.note}</p>}
-                                        <Link href="/booking" className="btn btn-outline" style={{ marginTop: '1rem' }}>Book Consultation</Link>
-                                    </div>
-                                </article>
-                            );
-                        })}
-                    </div>
-
-                    <div className="fees-row fees-row-bottom">
-                        {fees.slice(3).map((f) => {
-                            const Icon = f.icon || Info;
-                            const isIndividual = f.id === 'individual';
-                            const isCouples = f.id === 'couples';
-                            const isExtended = f.id === 'extended';
-                            return (
-                                <article key={f.id} className="fee-card card">
+                                <article key={f.id} className="fee-card">
                                     <div className="fee-card-top">
                                         <div className="fee-icon"><Icon size={28} color="var(--eucalyptus-green)" /></div>
                                         {isIndividual ? (
