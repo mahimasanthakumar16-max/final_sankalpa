@@ -1,0 +1,26 @@
+import { NextResponse } from 'next/server';
+import { forwardToAppsScript } from '@/lib/appsScript';
+
+export async function POST(request: Request) {
+  try {
+    const data = await request.json();
+    const { fullName, email, topics, support } = data;
+
+    if (!fullName || !email) {
+      return NextResponse.json({ error: 'Full name and email are required' }, { status: 400 });
+    }
+
+    // Forward to Google Apps Script (Google Sheets & email automation)
+    const success = await forwardToAppsScript('group_counseling', {
+      fullName,
+      email,
+      topics: topics || '',
+      support: support || ''
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Group counseling submit error:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}

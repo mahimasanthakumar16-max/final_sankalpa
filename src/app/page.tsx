@@ -1,39 +1,65 @@
 import Link from 'next/link';
 import { Heart, Users, Sparkles } from 'lucide-react';
-import { safeFetch } from '@/sanity/lib/client';
-import { homePageQuery, servicesQuery } from '@/sanity/lib/queries';
 
 export default async function Home() {
-  let homeData = null;
-  let services = [];
-
-  try {
-    const [fetchedHome, fetchedServices] = await Promise.all([
-      safeFetch(homePageQuery),
-      safeFetch(servicesQuery)
-    ]);
-    homeData = fetchedHome;
-    services = fetchedServices || [];
-  } catch (error) {
-    console.error("Home page data fetch failed:", error);
-  }
-
+  const services: any[] = [];
 
   // Fallback Content
   const content = {
-    heroTitlePrefix: homeData?.heroTitlePrefix || "Supporting Healing,",
-    heroTitleHighlight: homeData?.heroTitleHighlight || "Growth",
-    heroTitleSuffix: homeData?.heroTitleSuffix || "and Emotional Wellbeing",
-    heroSubtitle: homeData?.heroSubtitle || "A trust-centered sanctuary in Tamil Nadu, bridging modern clinical excellence with deeply intuitive, human-first emotional support.",
-    heroImage: homeData?.heroImage || "/images/hero.png",
-    ctaText: homeData?.ctaText || "Begin Consultation",
-    secondaryCtaText: homeData?.secondaryCtaText || "Explore Modalities",
-    introTitle: homeData?.introTitle || "Our Core Pillars",
-    showcaseTitle: homeData?.showcaseTitle || "We believe therapy is an art of listening to the unspoken.",
+    heroTitlePrefix: "Supporting Healing,",
+    heroTitleHighlight: "Growth",
+    heroTitleSuffix: "and Emotional Wellbeing",
+    heroSubtitle: "Helping you cultivate resilience, deepen self-understanding, and create meaningful change through compassionate, evidence-based therapy.",
+    heroImage: "/images/hero.png",
+    ctaText: "Begin Consultation",
+    secondaryCtaText: "Explore Modalities",
+    introTitle: "Our Core Pillars",
+    showcaseTitle: "We believe therapy is an art of listening to the unspoken.",
+  };
+
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://sankalpacounseling.com';
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "Psychotherapist",
+    "name": "Mahima Tirunelveli Santhakumar",
+    "medicalSpecialty": "Psychotherapy",
+    "url": baseUrl,
+    "logo": `${baseUrl}/images/LOTO.png`,
+    "image": `${baseUrl}/images/Mahima.png`,
+    "description": "Premium psychotherapy and counseling private practice providing safe, calming, and professional counseling in Tamil Nadu, India.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressRegion": "Tamil Nadu",
+      "addressCountry": "IN"
+    },
+    "knowsLanguage": ["English", "Tamil"],
+    "sameAs": [
+      "https://www.linkedin.com/company/sankalpa-counseling/",
+      "https://www.instagram.com/sankalpacounseling/",
+      "https://wa.me/message/CFABZDBLQVSIE1"
+    ],
+    "offers": [
+      {
+        "@type": "Offer",
+        "name": "Individual Therapy",
+        "price": "1500",
+        "priceCurrency": "INR"
+      },
+      {
+        "@type": "Offer",
+        "name": "Couples Counseling",
+        "price": "2000",
+        "priceCurrency": "INR"
+      }
+    ]
   };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+      />
       {/* Immersive Aesthetic Hero Section */}
       <section className="section" style={{
         minHeight: 'calc(100vh - 80px)',
@@ -145,7 +171,7 @@ export default async function Home() {
             </h2>
             <div className="about-copy">
               <p>
-                Welcome to Sankalpa Counseling. I’m Mahima Tirunelveli Santhakumar, a psychotherapist dedicated to creating a warm, non-judgmental space where healing can unfold naturally.
+                Welcome to Sankalpa Counseling. I’m Mahima Tirunelveli Santhakumar, a licensed <Link href="/about" style={{ color: 'var(--eucalyptus-green)', textDecoration: 'underline' }}>psychotherapist and counseling psychologist</Link> dedicated to creating a warm, non-judgmental space where healing can unfold naturally.
               </p>
               <p>
                 The Sanskrit word “Sankalpa” means a heartfelt resolve. I hope that any therapeutic relationship we build together starts with a heartfelt resolve towards healing and growth.
@@ -211,21 +237,28 @@ export default async function Home() {
               <span className="section-tag">{content.introTitle}</span>
               <div style={{ marginTop: '3rem' }}>
                 {[
-                  { title: 'Confidentiality', text: 'A secure vault for your innermost thoughts and vulnerabilities.' },
-                  { title: 'Compassion', text: 'Radiating warmth and zero-judgment empathy in every interaction.' },
-                  { title: 'Competence', text: 'Evidence-based clinical rigor meeting deep therapeutic intuition.' }
+                  { title: 'Confidentiality' },
+                  { title: 'Compassion' },
+                  { title: 'Competence' }
                 ].map((pillar, i) => (
                   <div key={i} style={{
-                    marginBottom: '3rem',
-                    paddingLeft: '2rem',
-                    borderLeft: '2px solid var(--eucalyptus-green)',
+                    marginBottom: '2rem',
                     backgroundColor: 'var(--surface-cream)',
-                    padding: '1.5rem 2rem',
-                    borderRadius: 'var(--radius-md)',
-                    transition: 'all 0.3s ease'
+                    padding: '2rem',
+                    borderRadius: '24px',
+                    borderLeft: '4px solid var(--eucalyptus-green)',
+                    transition: 'all 0.3s ease',
+                    textAlign: 'center'
                   }}>
-                    <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', color: 'var(--eucalyptus-green)' }}>0{i + 1}. {pillar.title}</h3>
-                    <p style={{ fontSize: '1rem', color: '#444', margin: 0 }}>{pillar.text}</p>
+                    <h3 style={{ 
+                      fontSize: '1.75rem', 
+                      margin: 0, 
+                      color: 'var(--eucalyptus-green)',
+                      fontFamily: 'var(--font-serif)',
+                      fontWeight: 'bold'
+                    }}>
+                      0{i + 1}. {pillar.title}
+                    </h3>
                   </div>
                 ))}
               </div>
@@ -239,7 +272,7 @@ export default async function Home() {
         <div className="container">
           <div className="text-center mb-16">
             <span className="section-tag">How I Can Help</span>
-            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', marginTop: '0.5rem' }}>Therapeutic Services</h2>
+            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', marginTop: '0.5rem' }}>Our Core Therapy Services in Tamil Nadu</h2>
           </div>
 
           <div style={{
@@ -351,7 +384,7 @@ export default async function Home() {
         <div className="container">
           <div className="text-center mb-12">
             <span className="section-tag">The Journey</span>
-            <h2>Your Path to Wellness</h2>
+            <h2>How to Start Your Therapy Journey</h2>
             <p style={{ maxWidth: '600px', margin: '0 auto' }}>Starting therapy is a courageous step. We have designed our process to be as gentle, transparent, and supportive as possible.</p>
           </div>
 
@@ -383,7 +416,7 @@ export default async function Home() {
         <div className="container">
           <div className="text-center mb-12">
             <span className="section-tag">Client Stories</span>
-            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', marginTop: '0.5rem' }}>What Clients Say</h2>
+            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', marginTop: '0.5rem' }}>What Clients Say About Their Healing Journey</h2>
           </div>
           <div style={{
             display: 'grid',
@@ -473,7 +506,7 @@ export default async function Home() {
         <div className="container">
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
             <span className="section-tag" style={{ backgroundColor: 'rgba(125, 145, 130, 0.1)', color: 'var(--eucalyptus-green)', marginBottom: '1.5rem' }}>The Final Step</span>
-            <h2 style={{ color: 'var(--soft-charcoal)', fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', marginBottom: '1.5rem', lineHeight: 1.2 }}>Ready to begin?</h2>
+            <h2 style={{ color: 'var(--soft-charcoal)', fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', marginBottom: '1.5rem', lineHeight: 1.2 }}>Begin Your Journey with a Counseling Psychologist</h2>
             <p style={{
               color: '#444',
               fontSize: '1.25rem',
@@ -483,6 +516,16 @@ export default async function Home() {
               fontWeight: 400
             }}>
               "Healing is not just the discovery of what is broken, but the quiet reclamation of what has always been whole. Your journey back to yourself starts here."
+            </p>
+            <p style={{
+              color: '#6B7280',
+              fontSize: '0.875rem',
+              marginTop: '-1.5rem',
+              marginBottom: '3rem',
+              fontFamily: 'var(--font-sans)',
+              lineHeight: 1.6
+            }}>
+              Clinical content reviewed and updated on: July 2026 by Mahima Tirunelveli Santhakumar, Licensed Psychotherapist &amp; Counseling Psychologist. Colorado LPCC Registration ID: LPCC.0023442.
             </p>
             <div className="flex justify-center">
               <Link href="/booking" className="btn btn-primary" style={{ padding: '1.25rem 3.5rem' }}>

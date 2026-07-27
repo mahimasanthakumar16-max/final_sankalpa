@@ -2,19 +2,43 @@
 
 import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
+import { useToast } from '@/components/Toast';
 
 export default function GroupCounselingForm() {
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const { showToast } = useToast();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsSubmitting(true);
 
-        setTimeout(() => {
+        const form = e.currentTarget;
+        const payload = {
+            fullName: (form.querySelector('#full-name') as HTMLInputElement).value,
+            email: (form.querySelector('#email') as HTMLInputElement).value,
+            topics: (form.querySelector('#topics') as HTMLTextAreaElement).value,
+            support: (form.querySelector('#support') as HTMLTextAreaElement).value,
+        };
+
+        try {
+            const res = await fetch('/api/group-counseling', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            if (res.ok) {
+                showToast('Thank you for your interest! We will be in touch soon.', 'success');
+                form.reset();
+            } else {
+                const data = await res.json();
+                showToast(data.error || 'Failed to submit interest. Please try again.', 'error');
+            }
+        } catch (err) {
+            showToast('An error occurred. Please try again.', 'error');
+        } finally {
             setIsSubmitting(false);
-            alert('Thank you for your interest! We will be in touch soon.');
-            (e.target as HTMLFormElement).reset();
-        }, 500);
+        }
     };
 
     return (

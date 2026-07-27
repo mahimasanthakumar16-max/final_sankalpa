@@ -1,9 +1,8 @@
 import Link from 'next/link';
 import { ArrowRight, Calendar, Clock, BookOpen } from 'lucide-react';
-import { safeFetch } from '@/sanity/lib/client';
-import { blogPostsQuery } from '@/sanity/lib/queries';
 import { formatPublishDate } from '@/lib/blog';
 import ClientBlogPage from './ClientBlogPage';
+import { prisma } from '@/lib/prisma';
 
 const RESOURCES = [
     {
@@ -28,7 +27,7 @@ const RESOURCES = [
         desc: "A collection of thoughtful journal prompts to encourage self-awareness, personal growth, and emotional reflection.",
         buttonText: "View Prompts",
         comingSoon: false,
-        isPrompts: true
+        downloadLink: "/resources/self-reflection-prompts"
     },
     {
         icon: 'CheckCircle',
@@ -47,10 +46,11 @@ const RESOURCES = [
     },
     {
         icon: 'BookOpen',
-        title: "Mental Health Resources",
-        desc: "A curated collection of trusted mental health resources, crisis supports, and recommended reading.",
-        buttonText: "Coming Soon",
-        comingSoon: true
+        title: "Crisis Resources",
+        desc: "A list of resources for when you are in immediate crisis and need support.",
+        buttonText: "View Resources",
+        comingSoon: false,
+        downloadLink: "/resources/crisis-resources"
     }
 ];
 
@@ -73,13 +73,31 @@ const SELF_REFLECTION_PROMPTS = [
     "If someone tries to give me money or buy me a meal, do I accept or refuse? If I have trouble accepting money, where did that come from?",
     "What do I believe to be true about myself? Is it hurting or helping me?",
     "A cluttered or messy environment can represent a cluttered mind. What is one thing I can do right now to make my environment cleaner or more organized?",
-    "What is one thing I can do today to get closer to my goal?",
-    "Who or what is stopping me from doing what I want to do? Do I need them in my life? How can I change my environment or my mindset to move past them and their influence?",
-    "What do I want my life to look like in five or ten years?"
+    "Did I spend time with a negative person this week? What boundary do I need to establish with that person?"
 ];
 
 export default async function BlogPageContent() {
-    const posts = await safeFetch(blogPostsQuery);
+    let posts: any[] = [];
+    try {
+        const dbPosts = await prisma.blog.findMany({
+            where: { status: 'PUBLISHED' },
+            orderBy: { publishedAt: 'desc' }
+        });
+        posts = dbPosts.map(p => ({
+            _id: p.id,
+            title: p.title,
+            slug: p.slug,
+            excerpt: p.excerpt,
+            author: p.author,
+            publishedAt: p.publishedAt.toISOString().split('T')[0],
+            readingTime: p.readingTime,
+            featured: p.featured,
+            mainImage: p.mainImage || undefined,
+            categories: p.categories,
+        }));
+    } catch (e) {
+        posts = [];
+    }
 
     return (
         <>
@@ -127,65 +145,67 @@ export default async function BlogPageContent() {
                             <BookOpen size={64} color="#7D9182" />
                             <h2 style={{ marginTop: '1.5rem', marginBottom: '0.5rem', fontSize: '1.75rem' }}>Blog Posts Coming Soon</h2>
                             <p style={{ color: '#6B7280', fontSize: '1rem', maxWidth: '600px' }}>
-                                New articles on mental health, emotional wellbeing, relationships, trauma recovery, mindfulness, and personal growth will be published here soon.
+                                We are preparing thoughtful articles on mental health, emotional well-being, relationships, personal growth, and self-care.
                             </p>
                             <p style={{ color: '#6B7280', fontSize: '0.9rem', marginTop: '1rem' }}>
-                                Check back soon for new resources.
+                                Please check back soon for new insights and resources.
                             </p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
                             {posts.map((post: any) => (
-                                <Link key={post._id} href={`/blog/${post.slug}`} className="card group" style={{ textDecoration: 'none' }}>
-                                    {post.mainImage && (
-                                        <div style={{ 
-                                            width: '100%', 
-                                            height: '200px', 
-                                            borderRadius: 'var(--radius-md)', 
-                                            overflow: 'hidden', 
-                                            marginBottom: '1rem' 
-                                        }}>
-                                            <img 
-                                                src={post.mainImage} 
-                                                alt={post.title} 
-                                                style={{ 
-                                                    width: '100%', 
-                                                    height: '100%', 
-                                                    objectFit: 'cover',
-                                                    transition: 'transform 0.3s ease'
-                                                }}
-                                                className="group-hover:scale-105"
-                                            />
+                                <article key={post._id}>
+                                    <Link href={`/blog/${post.slug}`} className="card group" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                                        {post.mainImage && (
+                                            <div style={{ 
+                                                width: '100%', 
+                                                height: '200px', 
+                                                borderRadius: 'var(--radius-md)', 
+                                                overflow: 'hidden', 
+                                                marginBottom: '1rem' 
+                                            }}>
+                                                <img 
+                                                    src={post.mainImage} 
+                                                    alt={post.title} 
+                                                    style={{ 
+                                                        width: '100%', 
+                                                        height: '100%', 
+                                                        objectFit: 'cover',
+                                                        transition: 'transform 0.3s ease'
+                                                    }}
+                                                    className="group-hover:scale-105"
+                                                />
+                                            </div>
+                                        )}
+                                        {post.categories && post.categories.length > 0 && (
+                                            <span className="section-tag" style={{ marginBottom: '0.5rem' }}>
+                                                {post.categories[0]}
+                                            </span>
+                                        )}
+                                        <h3 style={{ marginBottom: '0.5rem' }}>{post.title}</h3>
+                                        {post.excerpt && (
+                                            <p style={{ color: '#6B7280', marginBottom: '1rem' }}>{post.excerpt}</p>
+                                        )}
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem', color: '#6B7280', fontSize: '0.875rem' }}>
+                                            {post.author && <span>By {post.author}</span>}
+                                            {post.publishedAt && (
+                                                <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                                    <Calendar size={14} />
+                                                    {formatPublishDate(post.publishedAt)}
+                                                </span>
+                                            )}
+                                            {post.readingTime && (
+                                                <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                                    <Clock size={14} />
+                                                    {post.readingTime} min read
+                                                </span>
+                                            )}
                                         </div>
-                                    )}
-                                    {post.categories && post.categories.length > 0 && (
-                                        <span className="section-tag" style={{ marginBottom: '0.5rem' }}>
-                                            {post.categories[0]}
+                                        <span className="btn btn-secondary" style={{ marginTop: 'auto' }}>
+                                            Read More <ArrowRight size={16} />
                                         </span>
-                                    )}
-                                    <h3 style={{ marginBottom: '0.5rem' }}>{post.title}</h3>
-                                    {post.excerpt && (
-                                        <p style={{ color: '#6B7280', marginBottom: '1rem' }}>{post.excerpt}</p>
-                                    )}
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem', color: '#6B7280', fontSize: '0.875rem' }}>
-                                        {post.author && <span>By {post.author}</span>}
-                                        {post.publishedAt && (
-                                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                                                <Calendar size={14} />
-                                                {formatPublishDate(post.publishedAt)}
-                                            </span>
-                                        )}
-                                        {post.readingTime && (
-                                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                                                <Clock size={14} />
-                                                {post.readingTime} min read
-                                            </span>
-                                        )}
-                                    </div>
-                                    <span className="btn btn-secondary" style={{ marginTop: 'auto' }}>
-                                        Read More <ArrowRight size={16} />
-                                    </span>
-                                </Link>
+                                    </Link>
+                                </article>
                             ))}
                         </div>
                     )}

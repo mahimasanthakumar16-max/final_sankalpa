@@ -3,32 +3,35 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "next dev",
-        "build": "next build",
+        "dev": "node scripts/clean-cache.js && next dev",
+        "build": "node scripts/clean-cache.js && next build",
         "start": "next start",
         "lint": "eslint"
     },
     "dependencies": {
-        "@portabletext/react": "^6.2.0",
-        "@sanity/client": "^7.22.0",
-        "@sanity/code-input": "^7.2.8",
-        "@sanity/icons": "^3.7.4",
-        "@sanity/image-url": "^2.1.1",
-        "@sanity/vision": "^5.25.1",
+        "@prisma/client": "^5.22.0",
+        "@supabase/ssr": "^0.12.3",
+        "@supabase/supabase-js": "^2.110.7",
+        "bcryptjs": "^3.0.3",
+        "jsonwebtoken": "^9.0.3",
         "lucide-react": "^1.16.0",
         "next": "^16.2.6",
-        "next-sanity": "^9.5.6",
         "react": "19.2.4",
         "react-dom": "19.2.4",
-        "sanity": "^5.14.1",
         "styled-components": "^6.4.3"
     },
     "devDependencies": {
+        "@types/bcryptjs": "^2.4.6",
+        "@types/jsonwebtoken": "^9.0.10",
         "@types/node": "^20",
         "@types/react": "^19",
         "@types/react-dom": "^19",
         "eslint": "^9",
         "eslint-config-next": "16.2.6",
+        "prisma": "^5.22.0",
         "typescript": "^5"
+    },
+    "prisma": {
+        "seed": "node prisma/seed.js"
     }
 }

@@ -1,25 +1,18 @@
 import Link from 'next/link';
 import { CreditCard, CalendarX, Info, User, Users, HeartHandshake, Sparkles, Clock } from 'lucide-react';
-import { safeFetch } from '@/sanity/lib/client';
-import { feesPageQuery } from '@/sanity/lib/queries';
-import { PortableText } from '@portabletext/react';
+import type { Metadata } from 'next';
 
-const portableTextComponents = {
-    block: {
-        normal: ({ children }: any) => <p className="mb-4">{children}</p>,
-        strong: ({ children }: any) => <strong>{children}</strong>,
-    }
+export const metadata: Metadata = {
+  title: "Session Fees & Cancellation Policies | Sankalpa Counseling",
+  description: "Transparent pricing details for individual therapy, couples counseling, trauma recovery (EMDR), and online consultation rates at Sankalpa.",
+  alternates: {
+    canonical: '/fees',
+  }
 };
 
+import BreadcrumbsSchema from '@/components/BreadcrumbsSchema';
+
 export default async function FeesPage() {
-    let data = null;
-    try {
-        data = await safeFetch(feesPageQuery);
-    } catch (error) {
-        console.error("Fees fetch failed:", error);
-    }
-
-
     type FeeItem = {
         id: string;
         title: string;
@@ -77,8 +70,8 @@ export default async function FeesPage() {
         }
     ];
 
-    const fees: FeeItem[] = data?.feeStructures || fallbackFees;
-    const paymentMethods = data?.paymentMethods || [
+    const fees: FeeItem[] = fallbackFees;
+    const paymentMethods = [
         "UPI & Bank Transfer (Preferred)",
         "Debit & Credit Cards",
         "Digital Wallets"
@@ -86,6 +79,10 @@ export default async function FeesPage() {
 
     return (
         <>
+            <BreadcrumbsSchema items={[
+                { name: "Home", url: "/" },
+                { name: "Fees", url: "/fees" }
+            ]} />
             <section className="section fees-hero">
                 <div className="container text-center">
                     <div className="section-tag">INVESTMENT IN YOUR WELLBEING</div>

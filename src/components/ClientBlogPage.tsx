@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ArrowRight, BookOpen, Heart, FileText, CheckCircle } from 'lucide-react';
+import { useToast } from '@/components/Toast';
 
 // Create an icon map
 const iconMap: Record<string, any> = {
@@ -28,6 +29,33 @@ interface ClientBlogPageProps {
 
 export default function ClientBlogPage({ resources, prompts }: ClientBlogPageProps) {
     const [showPrompts, setShowPrompts] = useState(false);
+    const [newsletterEmail, setNewsletterEmail] = useState('');
+    const [isNewsletterSubmitting, setIsNewsletterSubmitting] = useState(false);
+    const { showToast } = useToast();
+
+    const handleNewsletterSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!newsletterEmail) return;
+        setIsNewsletterSubmitting(true);
+        try {
+            const res = await fetch('/api/newsletter', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: newsletterEmail }),
+            });
+            if (res.ok) {
+                showToast('Thank you for subscribing to our newsletter!', 'success');
+                setNewsletterEmail('');
+            } else {
+                const data = await res.json();
+                showToast(data.error || 'Failed to subscribe. Please try again.', 'error');
+            }
+        } catch (error) {
+            showToast('An error occurred. Please try again.', 'error');
+        } finally {
+            setIsNewsletterSubmitting(false);
+        }
+    };
 
     return (
         <>
@@ -79,11 +107,11 @@ export default function ClientBlogPage({ resources, prompts }: ClientBlogPagePro
                                         ) : (
                                             <a 
                                                 href={res.downloadLink} 
-                                                target="_blank" 
-                                                rel="noopener noreferrer" 
+                                                target={res.downloadLink?.endsWith('.pdf') ? "_blank" : undefined} 
+                                                rel={res.downloadLink?.endsWith('.pdf') ? "noopener noreferrer" : undefined} 
                                                 className="resource-action-link" 
                                                 style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}
-                                                download
+                                                download={res.downloadLink?.endsWith('.pdf') ? true : undefined}
                                             >
                                                 {res.buttonText} <ArrowRight size={14} />
                                             </a>
@@ -127,16 +155,19 @@ export default function ClientBlogPage({ resources, prompts }: ClientBlogPagePro
                         <p>
                             Receive occasional reflections, resources, and wellness updates from Sankalpa Counseling directly in your inbox.
                         </p>
-                        <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
+                        <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
                             <div className="newsletter-form-row">
                                 <input
                                     type="email"
                                     placeholder="Email Address"
                                     required
                                     aria-label="Email address"
+                                    value={newsletterEmail}
+                                    onChange={(e) => setNewsletterEmail(e.target.value)}
+                                    disabled={isNewsletterSubmitting}
                                 />
-                                <button type="submit" className="btn btn-primary">
-                                    Subscribe
+                                <button type="submit" className="btn btn-primary" disabled={isNewsletterSubmitting}>
+                                    {isNewsletterSubmitting ? 'Submitting...' : 'Subscribe'}
                                 </button>
                             </div>
                         </form>

@@ -1,0 +1,112 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("admins")
+}
+
+model Blog {
+  id              String     @id @default(cuid())
+  title           String
+  slug            String     @unique
+  excerpt         String     @db.Text
+  content         String     @db.Text
+  author          String     @default("Mahima Tirunelveli Santhakumar")
+  publishedAt     DateTime   @default(now())
+  readingTime     Int        @default(5)
+  featured        Boolean    @default(false)
+  mainImage       String?
+  categories      String[]   @default([])
+  tags            String[]   @default([])
+  status          BlogStatus @default(DRAFT)
+  seoTitle        String?
+  metaDescription String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  @@map("blogs")
+}
+
+model Booking {
+  id            String        @id @default(cuid())
+  clientName    String
+  email         String
+  phone         String
+  sessionType   String
+  preferredDate String
+  preferredTime String
+  message       String?       @db.Text
+  status        BookingStatus @default(PENDING)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@map("bookings")
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  service   String?
+  message   String   @db.Text
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("contact_messages")
+}
+
+model Resource {
+  id           String   @id @default(cuid())
+  title        String
+  category     String
+  description  String   @db.Text
+  fileUrl      String
+  thumbnailUrl String?
+  published    Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("resources")
+}
+
+model Testimonial {
+  id           String   @id @default(cuid())
+  clientName   String
+  review       String   @db.Text
+  rating       Float    @default(5.0)
+  location     String?
+  displayOrder Int      @default(0)
+  enabled      Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("testimonials")
+}

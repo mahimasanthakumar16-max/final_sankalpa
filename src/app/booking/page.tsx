@@ -173,9 +173,42 @@ export default function BookingPage() {
     return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&dates=${dates}`;
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
+    if (!selectedDate || !selectedTime || !selectedModalityObj) return;
+
+    setIsSubmitting(true);
+    setSubmitError('');
+
+    try {
+      const res = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          clientName: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          sessionType: `${selectedModalityObj.title} (${formData.mode})`,
+          preferredDate: selectedDate,
+          preferredTime: selectedTime,
+          message: formData.notes,
+        }),
+      });
+
+      if (res.ok) {
+        setIsSubmitted(true);
+      } else {
+        const data = await res.json();
+        setSubmitError(data.error || 'Failed to submit booking. Please try again.');
+      }
+    } catch (err) {
+      setSubmitError('An error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isSubmitted && selectedModalityObj && selectedDate && selectedTime) {
@@ -498,19 +531,28 @@ export default function BookingPage() {
                 />
               </div>
 
+              {submitError && (
+                <div style={{ padding: '0.75rem 1rem', backgroundColor: '#FEF2F2', border: '1px solid #FEE2E2', color: '#991B1B', borderRadius: '8px', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
+                  {submitError}
+                </div>
+              )}
+
               <div className="booking-actions">
                 <button
                   className="btn-booking-secondary"
                   onClick={() => setStep(2)}
                   type="button"
+                  disabled={isSubmitting}
                 >
                   <ChevronLeft size={16} /> Back
                 </button>
                 <button
                   type="submit"
                   className="btn-booking-primary"
+                  disabled={isSubmitting}
+                  style={{ opacity: isSubmitting ? 0.7 : 1 }}
                 >
-                  Confirm Free Consultation <CheckCircle2 size={16} />
+                  {isSubmitting ? 'Submitting...' : 'Confirm Free Consultation'} <CheckCircle2 size={16} />
                 </button>
               </div>
             </form>

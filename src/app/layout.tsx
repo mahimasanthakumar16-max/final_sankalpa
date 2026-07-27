@@ -1,40 +1,64 @@
 import type { Metadata } from "next";
+import { Inter, Cormorant_Garamond } from 'next/font/google';
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import Script from "next/script";
-import { safeFetch } from "@/sanity/lib/client";
-import { siteSettingsQuery } from "@/sanity/lib/queries";
+import { ToastProvider } from "@/components/Toast";
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-serif',
+  display: 'swap',
+});
 
 export async function generateMetadata(): Promise<Metadata> {
-  try {
-    const settings = await safeFetch(siteSettingsQuery);
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://sankalpacounseling.com';
 
-    return {
-      title: settings?.seo?.metaTitle || settings?.title || "Sankalpa Counseling | Premium Psychotherapy & Counseling in Tamil Nadu",
-      description: settings?.seo?.metaDescription || settings?.description || "A premium modern therapy private practice providing emotionally safe, calming, and professional psychotherapy and counseling.",
-      keywords: settings?.seo?.keywords?.join(", ") || "therapy, counseling, psychotherapy, mental health, Tamil Nadu, emotional wellness, Sankalpa Counseling",
-      icons: {
-        icon: "/images/LOTO.png",
-        shortcut: "/images/LOTO.png",
-        apple: "/images/LOTO.png"
-      },
-      openGraph: {
-        images: settings?.seo?.ogImage ? [settings.seo.ogImage] : [],
-      },
-    };
-  } catch (error) {
-    console.error("Metadata fetch failed:", error);
-    return {
-      title: "Sankalpa Counseling | Premium Psychotherapy & Counseling in Tamil Nadu",
-      description: "A premium modern therapy private practice providing emotionally safe, calming, and professional psychotherapy and counseling.",
-      icons: {
-        icon: "/images/LOTO.png",
-        shortcut: "/images/LOTO.png",
-        apple: "/images/LOTO.png"
-      },
-    };
-  }
+  return {
+    metadataBase: new URL(baseUrl),
+    title: "Sankalpa Counseling | Premium Psychotherapy & Counseling in Tamil Nadu",
+    description: "A premium modern therapy private practice providing emotionally safe, calming, and professional psychotherapy and counseling.",
+    keywords: "therapy, counseling, psychotherapy, mental health, Tamil Nadu, emotional wellness, Sankalpa Counseling, counseling psychologist Tamil Nadu",
+    alternates: {
+      canonical: '/',
+    },
+    icons: {
+      icon: "/images/LOTO.png",
+      shortcut: "/images/LOTO.png",
+      apple: "/images/LOTO.png"
+    },
+    openGraph: {
+      title: "Counseling Psychologist Tamil Nadu | Sankalpa Therapy",
+      description: "Licensed psychotherapist in Tamil Nadu offering secure online therapy and relationship counseling. Book a free consultation.",
+      url: baseUrl,
+      siteName: "Sankalpa Counseling",
+      images: [
+        {
+          url: '/images/LOTO.png',
+          width: 512,
+          height: 512,
+          alt: "Sankalpa Counseling Logo",
+        }
+      ],
+      locale: 'en_IN',
+      type: 'website',
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Counseling Psychologist Tamil Nadu | Sankalpa Therapy",
+      description: "Licensed psychotherapist in Tamil Nadu offering secure online therapy and relationship counseling.",
+      images: ['/images/LOTO.png']
+    }
+  };
 }
 
 export default async function RootLayout({
@@ -42,15 +66,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let settings = null;
-  try {
-    settings = await safeFetch(siteSettingsQuery);
-  } catch (error) {
-    console.error("RootLayout settings fetch failed:", error);
-  }
+  const settings = null;
 
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${cormorant.variable}`}>
       <head>
         {/* Temporarily commented out GA to troubleshoot hangs */}
         {/* <Script
@@ -67,14 +86,15 @@ export default async function RootLayout({
         </Script> */}
       </head>
       <body>
-        <Navigation settings={settings || undefined} />
-        <main style={{ paddingTop: '80px' }}>
-          {children}
-        </main>
-        <Footer settings={settings || undefined} />
+        <ToastProvider>
+          <Navigation settings={settings || undefined} />
+          <main style={{ paddingTop: '80px' }}>
+            {children}
+          </main>
+          <Footer settings={settings || undefined} />
+        </ToastProvider>
       </body>
     </html>
   );
 }
-
 

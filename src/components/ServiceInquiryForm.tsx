@@ -2,19 +2,52 @@
 
 import { ArrowRight } from 'lucide-react';
 import { useState } from 'react';
+import { useToast } from '@/components/Toast';
 
 export default function ServiceInquiryForm() {
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const { showToast } = useToast();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsSubmitting(true);
 
-        setTimeout(() => {
+        const form = e.currentTarget;
+        const formData = new FormData(form);
+        const contactMethod = formData.get('contact-method');
+
+        const payload = {
+            fullName: (form.querySelector('#inquiry-full-name') as HTMLInputElement).value,
+            age: Number((form.querySelector('#inquiry-age') as HTMLInputElement).value),
+            mobile: (form.querySelector('#inquiry-mobile') as HTMLInputElement).value,
+            email: (form.querySelector('#inquiry-email') as HTMLInputElement).value,
+            city: (form.querySelector('#inquiry-city') as HTMLInputElement).value,
+            service: (form.querySelector('#inquiry-service') as HTMLSelectElement).value,
+            concern: (form.querySelector('#inquiry-concern') as HTMLSelectElement).value,
+            contactMethod: contactMethod,
+            preferredTime: (form.querySelector('#inquiry-time') as HTMLSelectElement).value,
+            notes: (form.querySelector('#inquiry-notes') as HTMLTextAreaElement).value,
+        };
+
+        try {
+            const res = await fetch('/api/service-inquiry', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            if (res.ok) {
+                showToast('Thank you for your inquiry. We will respond within 24–48 business hours.', 'success');
+                form.reset();
+            } else {
+                const data = await res.json();
+                showToast(data.error || 'Failed to send inquiry. Please try again.', 'error');
+            }
+        } catch (err) {
+            showToast('An error occurred. Please try again.', 'error');
+        } finally {
             setIsSubmitting(false);
-            alert('Thank you for your inquiry. We will respond within 24–48 business hours.');
-            (e.target as HTMLFormElement).reset();
-        }, 500);
+        }
     };
 
     return (

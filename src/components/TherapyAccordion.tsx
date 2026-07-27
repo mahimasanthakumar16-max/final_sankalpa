@@ -45,7 +45,7 @@ const therapyTypes: TherapyType[] = [
         id: 'tfcbt',
         title: 'Trauma-Focused Cognitive Behavioral Therapy (TF-CBT)',
         description: 'A structured, evidence-based treatment for trauma that combines cognitive and behavioral techniques.',
-        fullContent: 'TF-CBT combines cognitive therapy, exposure therapy, and coping skills to help you process trauma in a safe way. This approach has strong research support for treating PTSD, childhood trauma, and complex grief.'
+        fullContent: 'TF-CBT combines cognitive therapy, exposure therapy, and coping skills to help you process trauma in a safe way. This approach has strong research support for treating post-traumatic stress disorder (PTSD), childhood trauma, and complex grief.'
     },
     {
         id: 'rct',

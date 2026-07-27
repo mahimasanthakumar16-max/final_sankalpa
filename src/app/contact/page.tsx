@@ -1,20 +1,11 @@
 import { Mail, Clock } from 'lucide-react';
-import { safeFetch } from '@/sanity/lib/client';
-import { contactPageQuery } from '@/sanity/lib/queries';
 import ContactForm from '@/components/ContactForm';
 
 export default async function ContactPage() {
-    let data = null;
-    try {
-        data = await safeFetch(contactPageQuery);
-    } catch (error) {
-        console.error("Contact fetch failed:", error);
-    }
-
     const contact = {
-        email: data?.email || "tsmahimatherapy@gmail.com",
-        phone: data?.phone || "+91 70586 00849",
-        officeHours: data?.officeHours || [
+        email: "tsmahimatherapy@gmail.com",
+        phone: "+91 70586 00849",
+        officeHours: [
             "Monday – Friday: 1:00 PM – 10:00 PM",
             "Saturday: 12:00 PM – 10:00 PM",
             "Sunday: Closed"

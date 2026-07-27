@@ -1,9 +1,24 @@
 import Link from 'next/link';
 import { GraduationCap, IdCard, CheckCircle2 } from 'lucide-react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "About Mahima | Licensed Psychotherapist in Tamil Nadu",
+  description: "Learn more about Mahima Tirunelveli Santhakumar, a licensed counseling psychologist providing trauma-informed and culturally sensitive psychotherapy.",
+  alternates: {
+    canonical: '/about',
+  }
+};
+
+import BreadcrumbsSchema from '@/components/BreadcrumbsSchema';
 
 export default function AboutPage() {
   return (
     <>
+      <BreadcrumbsSchema items={[
+        { name: "Home", url: "/" },
+        { name: "About", url: "/about" }
+      ]} />
       {/* ─── Hero Section ─── */}
       <section style={{
         paddingTop: 'calc(var(--spacing-xxl) + 60px)',
@@ -256,14 +271,15 @@ export default function AboutPage() {
                 }} />
                 <p style={{
                   fontFamily: 'var(--font-serif)',
-                  fontSize: 'clamp(1.1rem, 2vw, 1.35rem)',
+                  fontSize: 'clamp(1.2rem, 2.5vw, 1.5rem)',
+                  fontWeight: 500,
                   fontStyle: 'italic',
-                  color: 'var(--warm-terracotta)',
+                  color: '#7A5B44',
                   lineHeight: 1.6,
                   margin: 0,
                   position: 'relative', zIndex: 1,
                 }}>
-                  &ldquo;Healing begins when we feel seen, safe, and accepted for who we truly are.&rdquo;
+                  <strong>&ldquo;Healing begins when we feel seen, safe, and accepted for who we truly are.&rdquo;</strong>
                 </p>
               </div>
 
@@ -281,7 +297,7 @@ export default function AboutPage() {
                 </h3>
 
                 <p style={{ fontFamily: 'var(--font-sans)', fontSize: '1rem', lineHeight: 1.8, color: 'var(--soft-charcoal)', marginBottom: '1rem' }}>
-                  Have you ever felt like parts of your identity are misunderstood, or completely unseen in the therapy room?
+                  Have you ever felt like parts of your identity are misunderstood or completely unseen?
                 </p>
                 <p style={{ fontFamily: 'var(--font-sans)', fontSize: '1rem', lineHeight: 1.8, color: 'var(--soft-charcoal)', marginBottom: '1rem' }}>
                   I believe that healing begins when we feel seen, safe, and accepted for who we truly are.
@@ -422,6 +438,16 @@ export default function AboutPage() {
             marginBottom: '2.5rem',
           }}>
             If you are ready to explore your story in a supportive, affirming, and nonjudgmental environment, I would be delighted to connect with you.
+          </p>
+          <p style={{
+            color: '#6B7280',
+            fontSize: '0.875rem',
+            marginTop: '-1.5rem',
+            marginBottom: '2.5rem',
+            fontFamily: 'var(--font-sans)',
+            lineHeight: 1.6
+          }}>
+            Clinical content reviewed and updated on: July 2026 by Mahima Tirunelveli Santhakumar, Licensed Psychotherapist &amp; Counseling Psychologist. Colorado LPCC Registration ID: LPCC.0023442.
           </p>
           <Link href="/booking" className="btn btn-primary" style={{
             padding: '1.25rem 3rem',

@@ -1,14 +1,18 @@
 import { ChevronDown, Info } from 'lucide-react';
-import { safeFetch } from '@/sanity/lib/client';
-import { faqsQuery } from '@/sanity/lib/queries';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Frequently Asked Questions | Sankalpa Counseling",
+  description: "Find answers to common questions about starting therapy, virtual session formats, confidentiality, cancellation policies, and therapy languages.",
+  alternates: {
+    canonical: '/faq',
+  }
+};
+
+import BreadcrumbsSchema from '@/components/BreadcrumbsSchema';
 
 export default async function FAQPage() {
-    let cmsFaqs = [];
-    try {
-        cmsFaqs = await safeFetch(faqsQuery);
-    } catch (error) {
-        console.error("FAQ fetch failed:", error);
-    }
+    const cmsFaqs: any[] = [];
 
     const fallbackFaqs = [
         {
@@ -64,8 +68,29 @@ export default async function FAQPage() {
         question.toLowerCase().includes("in-person") || 
         question.toLowerCase().includes("offer");
 
+    const faqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqs.map((f: any) => ({
+            "@type": "Question",
+            "name": f.question,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": f.answer
+            }
+        }))
+    };
+
     return (
         <>
+            <BreadcrumbsSchema items={[
+                { name: "Home", url: "/" },
+                { name: "FAQ", url: "/faq" }
+            ]} />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
             <section className="section section-bg-sand" style={{ paddingTop: 'calc(var(--spacing-xxl) + 40px)' }}>
                 <div className="container text-center" style={{ maxWidth: '800px' }}>
                     <h1 className="mb-4">Common Questions</h1>

@@ -64,7 +64,7 @@ export default function ServicesPage() {
                     <span className="section-tag">THERAPEUTIC SERVICES</span>
                     <h1 className="services-intro-heading">Healing That Meets You Where You Are</h1>
                     <p className="services-intro-text">
-                        Therapy is not one-size-fits-all. Every person journey is unique. I create individualized services to support your emotional wellbeing, relationships, and personal growth through a calm, compassionate, and deeply intuitive process.
+                        There is no one-size-fits-all approach to therapy. Every person’s journey is unique. At Sankalpa Counseling, we tailor our approach to support your emotional wellbeing, relationships, and personal growth.
                     </p>
                 </div>
             </section>
