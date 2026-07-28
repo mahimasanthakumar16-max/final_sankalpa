@@ -5,6 +5,8 @@ import { cookies } from 'next/headers';
 import { createClient } from '@supabase/supabase-js';
 import { verifyToken } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
 /** Helper to extract bucket and path from a public Supabase URL */
 function parseSupabasePublicUrl(url: string): { bucket: string; path: string } | null {
   try {
