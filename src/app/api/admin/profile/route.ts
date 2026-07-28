@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma';
 import { cookies } from 'next/headers';
 import { verifyToken, hashPassword } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
 async function getAuthenticatedAdminId() {
   const cookieStore = await cookies();
   const token = cookieStore.get('admin_token')?.value;
