@@ -4,7 +4,8 @@
     "private": true,
     "scripts": {
         "dev": "node scripts/clean-cache.js && next dev",
-        "build": "node scripts/clean-cache.js && next build",
+        "build": "prisma generate && node scripts/clean-cache.js && next build",
+        "postinstall": "prisma generate",
         "start": "next start",
         "lint": "eslint"
     },
