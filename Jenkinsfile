@@ -33,10 +33,11 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo '📦 Installing npm packages...'
-                // --ignore-scripts skips postinstall to avoid prisma PATH issues on Windows
+                // --ignore-scripts skips postinstall so prisma PATH is not needed during install
                 bat 'npm ci --ignore-scripts'
-                echo '🔧 Generating Prisma client...'
-                bat 'npx prisma generate'
+                echo '🔧 Generating Prisma client (using local v5 binary)...'
+                // Call local prisma binary directly — avoids npx downloading wrong latest version
+                bat '.\\node_modules\\.bin\\prisma.cmd generate'
             }
         }
 
