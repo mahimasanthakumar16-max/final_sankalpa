@@ -12,8 +12,9 @@ pipeline {
     }
 
     environment {
-        SONAR_SCANNER_HOME             = tool 'SonarScanner'
-        NODE_ENV                       = 'production'
+        SONAR_SCANNER_HOME = tool 'SonarScanner'
+        // NODE_ENV is NOT set globally — setting it to 'production' globally
+        // causes npm ci to skip devDependencies (where prisma CLI lives!)
         // Uncomment and wire up after adding secrets to Jenkins credentials:
         // NEXT_PUBLIC_SUPABASE_URL      = credentials('NEXT_PUBLIC_SUPABASE_URL')
         // NEXT_PUBLIC_SUPABASE_ANON_KEY = credentials('NEXT_PUBLIC_SUPABASE_ANON_KEY')
@@ -32,12 +33,13 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                echo '📦 Installing npm packages...'
-                // --ignore-scripts skips postinstall so prisma PATH is not needed during install
-                bat 'npm ci --ignore-scripts'
+                echo '📦 Installing npm packages (including devDependencies)...'
+                // --ignore-scripts: skip postinstall (prisma generate) since prisma PATH not set yet
+                // --include=dev: force install devDependencies even if NODE_ENV is set elsewhere
+                bat 'npm ci --ignore-scripts --include=dev'
                 echo '🔧 Generating Prisma client (using local v5 binary)...'
-                // Call local prisma binary directly — avoids npx downloading wrong latest version
-                bat '.\\node_modules\\.bin\\prisma.cmd generate'
+                // Use npm exec to run the locally installed prisma (v5) — avoids npx version mismatch
+                bat 'npm exec -- prisma generate'
             }
         }
 
@@ -76,7 +78,10 @@ pipeline {
         stage('Build') {
             steps {
                 echo '🏗️ Building Next.js application...'
-                bat 'npm run build'
+                // Set NODE_ENV=production only at build time, not globally
+                withEnv(['NODE_ENV=production']) {
+                    bat 'npm run build'
+                }
             }
         }
 
