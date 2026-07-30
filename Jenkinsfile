@@ -60,17 +60,10 @@ pipeline {
                         -Dsonar.projectKey=sankalpa-care ^
                         -Dsonar.projectName="Sankalpa Care" ^
                         -Dsonar.sources=src ^
-                        -Dsonar.exclusions=**/node_modules/**,**/.next/**,**/prisma/**
+                        -Dsonar.exclusions=**/node_modules/**,**/.next/**,**/prisma/** ^
+                        -Dsonar.qualitygate.wait=true ^
+                        -Dsonar.qualitygate.timeout=300
                     """
-                }
-            }
-        }
-
-        stage('Quality Gate') {
-            steps {
-                echo '🚦 Waiting for SonarQube Quality Gate result...'
-                timeout(time: 5, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
                 }
             }
         }
