@@ -1,6 +1,7 @@
 // =================================================
 // Jenkinsfile — Sankalpa Care CI/CD Pipeline
 // Stack: Next.js 16 + TypeScript + Prisma + Supabase
+// Windows Jenkins: uses 'bat' instead of 'sh'
 // =================================================
 
 pipeline {
@@ -32,16 +33,15 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo '📦 Installing npm packages...'
-                // Use 'bat' instead of 'sh' if Jenkins runs on Windows
-                sh 'npm ci'
+                bat 'npm ci'
             }
         }
 
         stage('Lint') {
             steps {
                 echo '🔍 Running ESLint...'
-                // || true — lint warnings won't fail the build
-                sh 'npm run lint || true'
+                // Exit code is ignored so lint warnings don't fail the build
+                bat 'npm run lint || exit 0'
             }
         }
 
@@ -49,11 +49,11 @@ pipeline {
             steps {
                 echo '📊 Running SonarQube static code analysis...'
                 withSonarQubeEnv('SonarQube') {
-                    sh """
-                        ${SONAR_SCANNER_HOME}/bin/sonar-scanner \
-                        -Dsonar.projectKey=sankalpa-care \
-                        -Dsonar.projectName="Sankalpa Care" \
-                        -Dsonar.sources=src \
+                    bat """
+                        %SONAR_SCANNER_HOME%\\bin\\sonar-scanner.bat ^
+                        -Dsonar.projectKey=sankalpa-care ^
+                        -Dsonar.projectName="Sankalpa Care" ^
+                        -Dsonar.sources=src ^
                         -Dsonar.exclusions=**/node_modules/**,**/.next/**,**/prisma/**
                     """
                 }
@@ -72,7 +72,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo '🏗️ Building Next.js application...'
-                sh 'npm run build'
+                bat 'npm run build'
             }
         }
 
@@ -83,8 +83,8 @@ pipeline {
             steps {
                 echo '🚀 Deploying Sankalpa Care...'
                 // Add your deployment command here. Examples:
-                // sh 'pm2 restart sankalpa-care'
-                // sh 'docker build -t sankalpa-care . && docker-compose up -d'
+                // bat 'pm2 restart sankalpa-care'
+                // bat 'docker build -t sankalpa-care .'
                 echo '⚠️  Deployment step not configured yet — add your deploy command here!'
             }
         }
