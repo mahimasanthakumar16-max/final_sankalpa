@@ -416,7 +416,7 @@ export default async function Home() {
         <div className="container">
           <div className="text-center mb-12">
             <span className="section-tag">Client Stories</span>
-            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', marginTop: '0.5rem' }}>What Clients Say About Their Healing Journey</h2>
+            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', marginTop: '0.5rem' }}>What Clients Say</h2>
           </div>
           <div style={{
             display: 'grid',
