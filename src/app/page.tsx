@@ -525,7 +525,7 @@ export default async function Home() {
               fontFamily: 'var(--font-sans)',
               lineHeight: 1.6
             }}>
-              Clinical content reviewed and updated on: July 2026 by Mahima Tirunelveli Santhakumar, Licensed Psychotherapist &amp; Counseling Psychologist. Colorado LPCC Registration ID: LPCC.0023442.
+              Clinical content reviewed and updated on: July 2026 by Mahima Tirunelveli Santhakumar, Psychotherapist &amp; Counseling Psychologist.
             </p>
             <div className="flex justify-center">
               <Link href="/booking" className="btn btn-primary" style={{ padding: '1.25rem 3.5rem' }}>
