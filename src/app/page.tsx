@@ -171,7 +171,7 @@ export default async function Home() {
             </h2>
             <div className="about-copy">
               <p>
-                Welcome to Sankalpa Counseling. I’m Mahima Tirunelveli Santhakumar, a licensed <Link href="/about" style={{ color: 'var(--eucalyptus-green)', textDecoration: 'underline' }}>psychotherapist and counseling psychologist</Link> dedicated to creating a warm, non-judgmental space where healing can unfold naturally.
+                Welcome to Sankalpa Counseling. I’m Mahima Tirunelveli Santhakumar, a <Link href="/about" style={{ color: 'var(--eucalyptus-green)', textDecoration: 'underline' }}>psychotherapist</Link> dedicated to creating a warm, non-judgmental space where healing can unfold naturally.
               </p>
               <p>
                 The Sanskrit word “Sankalpa” means a heartfelt resolve. I hope that any therapeutic relationship we build together starts with a heartfelt resolve towards healing and growth.
