@@ -272,7 +272,7 @@ export default async function Home() {
         <div className="container">
           <div className="text-center mb-16">
             <span className="section-tag">How I Can Help</span>
-            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', marginTop: '0.5rem' }}>Our Core Therapy Services in Tamil Nadu</h2>
+            <h2 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', marginTop: '0.5rem' }}>Therapeutic Services</h2>
           </div>
 
           <div style={{
