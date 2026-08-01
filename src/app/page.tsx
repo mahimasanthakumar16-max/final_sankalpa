@@ -506,7 +506,7 @@ export default async function Home() {
         <div className="container">
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
             <span className="section-tag" style={{ backgroundColor: 'rgba(125, 145, 130, 0.1)', color: 'var(--eucalyptus-green)', marginBottom: '1.5rem' }}>The Final Step</span>
-            <h2 style={{ color: 'var(--soft-charcoal)', fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', marginBottom: '1.5rem', lineHeight: 1.2 }}>Begin Your Journey with a Counseling Psychologist</h2>
+            <h2 style={{ color: 'var(--soft-charcoal)', fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', marginBottom: '1.5rem', lineHeight: 1.2 }}>Ready to Begin?</h2>
             <p style={{
               color: '#444',
               fontSize: '1.25rem',
