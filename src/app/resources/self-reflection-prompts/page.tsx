@@ -58,8 +58,11 @@ export default function SelfReflectionPromptsPage() {
                 </div>
 
                 <div style={{ marginTop: '4rem', display: 'flex', justifyContent: 'flex-start', paddingLeft: '1rem' }}>
-                    {/* Assuming there might be a PDF for download in the future, currently just a placeholder or disabled button */}
-                    <button 
+                    <a 
+                        href="/resources/self-reflection-prompts.pdf"
+                        download="self-reflection-prompts.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="btn btn-primary"
                         style={{ 
                             display: 'inline-flex', 
@@ -72,11 +75,12 @@ export default function SelfReflectionPromptsPage() {
                             backgroundColor: '#7D9182',
                             color: 'white',
                             border: 'none',
+                            textDecoration: 'none',
                             cursor: 'pointer'
                         }}
                     >
                         Download PDF <ArrowRight size={18} />
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
