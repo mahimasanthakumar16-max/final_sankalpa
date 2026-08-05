@@ -96,6 +96,7 @@ export default async function BlogPageContent() {
             categories: p.categories,
         }));
     } catch (e) {
+        console.error("Error fetching blog posts from DB:", e);
         posts = [];
     }
 
