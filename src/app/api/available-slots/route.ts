@@ -27,7 +27,7 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: 'date must be YYYY-MM-DD' }, { status: 400 });
       }
       const day = await computeDayAvailability(date);
-      return NextResponse.json({ date, ...day });
+      return NextResponse.json(day);
     }
 
     return NextResponse.json(
