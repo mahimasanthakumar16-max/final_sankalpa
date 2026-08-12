@@ -3,6 +3,14 @@
 import { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, Search, X, Check, FileText } from 'lucide-react';
 import { useToast } from '@/components/Toast';
+import RichTextEditor from '@/components/admin/RichTextEditor';
+
+function stripHtml(html: string): string {
+  if (typeof window === 'undefined') return html.replace(/<[^>]*>/g, '');
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+}
 
 interface Blog {
   id: string;
@@ -379,13 +387,10 @@ export default function BlogsAdminPage() {
 
               <div>
                 <label style={{ display: 'block', marginBottom: '0.4rem', fontSize: '0.85rem', fontWeight: 500 }}>Content *</label>
-                <textarea
-                  required
-                  rows={8}
+                <RichTextEditor
                   value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder="Supports text / html format content"
-                  style={{ width: '100%', padding: '0.6rem', borderRadius: '6px', border: '1px solid #E5E7EB', resize: 'vertical', fontFamily: 'monospace' }}
+                  onChange={setContent}
+                  placeholder="Write your blog article here. Use the toolbar for headings, formatting, lists, links, and images..."
                 />
               </div>
 

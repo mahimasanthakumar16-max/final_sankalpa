@@ -5,7 +5,8 @@ import { usePathname, useRouter } from 'next/navigation';
 import { 
   LayoutDashboard, 
   BookOpen, 
-  CalendarRange, 
+  CalendarRange,
+  CalendarDays, 
   MessageSquare, 
   Library, 
   HeartHandshake, 
@@ -16,6 +17,7 @@ import {
 const MENU_ITEMS = [
   { name: 'Dashboard', path: '/admin', icon: LayoutDashboard },
   { name: 'Blogs', path: '/admin/blogs', icon: BookOpen },
+  { name: 'Availability', path: '/admin/availability', icon: CalendarDays },
   { name: 'Bookings', path: '/admin/bookings', icon: CalendarRange },
   { name: 'Messages', path: '/admin/messages', icon: MessageSquare },
   { name: 'Resources', path: '/admin/resources', icon: Library },

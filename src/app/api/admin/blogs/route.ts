@@ -5,6 +5,10 @@ import { verifyToken } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]*>/g, '');
+}
+
 async function isAuthenticated() {
   const cookieStore = await cookies();
   const token = cookieStore.get('admin_token')?.value;
@@ -65,7 +69,8 @@ export async function POST(request: Request) {
       count++;
     }
 
-    const readingTime = Math.max(1, Math.round(content.split(/\s+/).length / 200));
+    const plainTextContent = stripHtml(content);
+    const readingTime = Math.max(1, Math.round(plainTextContent.split(/\s+/).length / 200));
 
     const blog = await prisma.blog.create({
       data: {

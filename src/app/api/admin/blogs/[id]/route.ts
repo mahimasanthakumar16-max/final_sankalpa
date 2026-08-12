@@ -7,6 +7,10 @@ import { verifyToken } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]*>/g, '');
+}
+
 /** Helper to extract bucket and path from a public Supabase URL */
 function parseSupabasePublicUrl(url: string): { bucket: string; path: string } | null {
   try {
@@ -77,7 +81,7 @@ export async function PUT(
 
     // Re‑calculate reading time only when content changes
     const readingTime = content
-      ? Math.max(1, Math.round(content.split(/\\s+/).length / 200))
+      ? Math.max(1, Math.round(stripHtml(content).split(/\s+/).length / 200))
       : existing.readingTime;
 
     const updated = await prisma.blog.update({

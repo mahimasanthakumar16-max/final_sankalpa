@@ -12,6 +12,23 @@ import BreadcrumbsSchema from '@/components/BreadcrumbsSchema';
 
 export const dynamic = 'force-dynamic';
 
+function toRenderableHtml(rawContent: string): string {
+    if (!rawContent) return '';
+    const trimmed = rawContent.trim();
+    if (!trimmed) return '';
+    const hasBlockHtml = /<(p|div|h[1-6]|ul|ol|li|blockquote|pre|table|section|article|br\s*\/?)[^>]*>/i.test(trimmed);
+    if (hasBlockHtml) {
+        return trimmed;
+    }
+    return trimmed
+        .split(/\n\s*\n/)
+        .map((para) => {
+            const inner = para.replace(/\n/g, '<br />');
+            return `<p>${inner}</p>`;
+        })
+        .join('\n');
+}
+
 interface BlogPostPageProps {
     params: Promise<{ slug: string }>;
 }
@@ -99,7 +116,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     const readingTime = post.readingTime;
     const mainImage = post.mainImage;
     const excerpt = post.excerpt;
-    const content = post.content;
+    const rawContent = post.content;
+    const renderableContent = toRenderableHtml(rawContent);
     const category = post.categories[0] || 'Wellness';
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://sankalpacounseling.com';
@@ -163,9 +181,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     <div className="blog-post-content">
                         <p className="blog-post-lead">{excerpt}</p>
                         <div 
-                          className="blog-post-paragraph"
-                          style={{ whiteSpace: 'pre-wrap', marginTop: '1.5rem', lineHeight: '1.75' }}
-                          dangerouslySetInnerHTML={{ __html: content }}
+                          className="blog-post-richtext"
+                          dangerouslySetInnerHTML={{ __html: renderableContent }}
                         />
                     </div>
                 </div>

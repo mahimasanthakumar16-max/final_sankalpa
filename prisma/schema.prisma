@@ -1,6 +1,7 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {
@@ -17,6 +18,11 @@ enum BookingStatus {
   CONFIRMED
   COMPLETED
   CANCELLED
+}
+
+enum AvailabilityType {
+  RECURRING
+  SPECIFIC_DATE
 }
 
 model Admin {
@@ -66,6 +72,23 @@ model Booking {
   updatedAt     DateTime      @updatedAt
 
   @@map("bookings")
+}
+
+model Availability {
+  id          String           @id @default(cuid())
+  type        AvailabilityType
+  dayOfWeek   Int?             // 0=Sun ... 6=Sat for RECURRING
+  date        DateTime?        // for SPECIFIC_DATE (stored as midnight)
+  startTime   String           // HH:MM 24h e.g. "15:30"
+  endTime     String           // HH:MM 24h e.g. "18:00"
+  isAvailable Boolean          // true=available / false=blocked/unavailable
+  note        String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([dayOfWeek, type])
+  @@index([date, type])
+  @@map("availabilities")
 }
 
 model ContactMessage {
