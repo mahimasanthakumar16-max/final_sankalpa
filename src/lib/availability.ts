@@ -104,11 +104,20 @@ export async function loadAvailabilityWindows(dateStr: string): Promise<Availabi
   const dateObj = new Date(Date.UTC(y, m - 1, d));
   const dayOfWeek = dateObj.getUTCDay();
 
-  const results: any[] = await prisma.$queryRawUnsafe(`
-    SELECT * FROM "availabilities"
-    WHERE (type = 'RECURRING' AND "dayOfWeek" = $1::int)
-       OR (type = 'SPECIFIC_DATE' AND date = date_trunc('day', $2::timestamptz)::timestamp)
-  `, dayOfWeek, `${dateStr}T00:00:00.000Z`);
+  const results = await prisma.availability.findMany({
+    where: {
+      OR: [
+        {
+          type: 'RECURRING',
+          dayOfWeek: dayOfWeek,
+        },
+        {
+          type: 'SPECIFIC_DATE',
+          date: dateObj,
+        },
+      ],
+    },
+  });
 
   return results.map((r: any) => ({
     startTime: r.startTime,
@@ -146,33 +155,30 @@ export async function computeDayAvailability(dateStr: string): Promise<DayAvaila
   const windows = await loadAvailabilityWindows(dateStr);
   const booked = await loadBookedSlots(dateStr);
 
-  const specificWindows = windows.filter(w => w.type === 'SPECIFIC_DATE');
-  const hasSpecific = specificWindows.length > 0;
-  const activeWindows = hasSpecific ? specificWindows : windows;
+  const recurringAvailable = windows.filter(w => w.type === 'RECURRING' && w.isAvailable);
+  const specificAvailable = windows.filter(w => w.type === 'SPECIFIC_DATE' && w.isAvailable);
+  const specificBlocked = windows.filter(w => w.type === 'SPECIFIC_DATE' && !w.isAvailable);
+
+  // Base availability is:
+  // If there are specific available windows, they define the base availability.
+  // Otherwise, recurring available windows define the base.
+  const baseWindows = specificAvailable.length > 0 ? specificAvailable : recurringAvailable;
 
   const slotMap24 = new Map<string, { available: boolean; reason?: SlotInfo['reason'] }>();
 
-  for (const w of activeWindows) {
+  // Populate base available slots
+  for (const w of baseWindows) {
     const slots24 = expandWindowToSlots(w.startTime, w.endTime);
     for (const s of slots24) {
-      if (w.isAvailable) {
-        if (!slotMap24.has(s) || slotMap24.get(s)?.available === false) {
-          slotMap24.set(s, { available: true });
-        }
-      } else {
-        slotMap24.set(s, { available: false, reason: 'blocked' });
-      }
+      slotMap24.set(s, { available: true });
     }
   }
 
-  if (hasSpecific) {
-    const specificUnavail = specificWindows.some(w => !w.isAvailable);
-    if (specificUnavail) {
-      for (const [s, v] of Array.from(slotMap24.entries())) {
-        if (v.available === false && v.reason !== 'blocked') {
-          slotMap24.set(s, { available: false, reason: 'blocked' });
-        }
-      }
+  // Apply blocked times (specific-date blocks)
+  for (const w of specificBlocked) {
+    const blockedSlots = expandWindowToSlots(w.startTime, w.endTime);
+    for (const s of blockedSlots) {
+      slotMap24.set(s, { available: false, reason: 'blocked' });
     }
   }
 

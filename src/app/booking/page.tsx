@@ -123,7 +123,7 @@ export default function BookingPage() {
     setMonthLoading(true);
     (async () => {
       try {
-        const res = await fetch(`/api/available-slots?month=${monthKey}`);
+        const res = await fetch(`/api/available-slots?month=${monthKey}&_t=${Date.now()}`, { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
           if (!cancelled) setMonthAvailability(data.availability || {});
@@ -147,7 +147,7 @@ export default function BookingPage() {
     setDayLoading(true);
     (async () => {
       try {
-        const res = await fetch(`/api/available-slots?date=${selectedDate}`);
+        const res = await fetch(`/api/available-slots?date=${selectedDate}&_t=${Date.now()}`, { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
           if (!cancelled) {
@@ -258,7 +258,7 @@ export default function BookingPage() {
     if (!selectedDate || !selectedTime || !selectedModalityObj) return;
     // Live double-check: re-verify slot availability at submit time
     try {
-      const checkRes = await fetch(`/api/available-slots?date=${selectedDate}`);
+      const checkRes = await fetch(`/api/available-slots?date=${selectedDate}&_t=${Date.now()}`, { cache: 'no-store' });
       if (checkRes.ok) {
         const d = await checkRes.json();
         const match = d.slots.find((s: SlotInfo) => s.time === selectedTime);

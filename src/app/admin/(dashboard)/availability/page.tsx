@@ -70,12 +70,35 @@ function formatFriendlyDate(dateStr: string): string {
   });
 }
 
+function time12To24(hour: number, minute: string, period: string): string {
+  let h = hour % 12;
+  if (period === 'PM') h += 12;
+  if (period === 'AM' && hour === 12) h = 0;
+  return `${String(h).padStart(2, '0')}:${minute}`;
+}
+
 function time24To12(time24: string): string {
   const [h, m] = time24.split(':').map(Number);
-  const suffix = h >= 12 ? 'PM' : 'AM';
-  let hh = h % 12;
-  if (hh === 0) hh = 12;
-  return `${String(hh).padStart(2, '0')}:${String(m).padStart(2, '0')} ${suffix}`;
+  const period = h >= 12 ? 'PM' : 'AM';
+  let hour12 = h % 12;
+  if (hour12 === 0) hour12 = 12;
+  return `${hour12}:${String(m).padStart(2, '0')} ${period}`;
+}
+
+function time24To12Hour(time24: string): string {
+  const h = Number(time24.split(':')[0]);
+  let hour12 = h % 12;
+  if (hour12 === 0) hour12 = 12;
+  return String(hour12);
+}
+
+function time24To12Minute(time24: string): string {
+  return time24.split(':')[1];
+}
+
+function time24To12Period(time24: string): string {
+  const h = Number(time24.split(':')[0]);
+  return h >= 12 ? 'PM' : 'AM';
 }
 
 function isPastDate(dateStr: string): boolean {
@@ -108,8 +131,15 @@ export default function AdminAvailabilityPage() {
   const [formDate, setFormDate] = useState<string>(todayKey());
   const [formStart, setFormStart] = useState<string>('10:00');
   const [formEnd, setFormEnd] = useState<string>('14:00');
+  const [formStartHour, setFormStartHour] = useState<string>('10');
+  const [formStartMinute, setFormStartMinute] = useState<string>('00');
+  const [formStartPeriod, setFormStartPeriod] = useState<string>('AM');
+  const [formEndHour, setFormEndHour] = useState<string>('2');
+  const [formEndMinute, setFormEndMinute] = useState<string>('00');
+  const [formEndPeriod, setFormEndPeriod] = useState<string>('PM');
   const [formIsAvailable, setFormIsAvailable] = useState<boolean>(true);
   const [formNote, setFormNote] = useState<string>('');
+  const [formFullDay, setFormFullDay] = useState<boolean>(false);
 
   const monthKey = `${currentMonth.getFullYear()}-${String(currentMonth.getMonth() + 1).padStart(2, '0')}`;
 
@@ -216,8 +246,16 @@ export default function AdminAvailabilityPage() {
     setFormDate(selectedDate || todayKey());
     setFormStart('10:00');
     setFormEnd('14:00');
+    // Set default 12h values
+    setFormStartHour('10');
+    setFormStartMinute('00');
+    setFormStartPeriod('AM');
+    setFormEndHour('2');
+    setFormEndMinute('00');
+    setFormEndPeriod('PM');
     setFormIsAvailable(true);
     setFormNote('');
+    setFormFullDay(false);
   };
 
   const handleOpenCreate = (preset?: 'RECURRING' | 'SPECIFIC_DATE') => {
@@ -235,6 +273,18 @@ export default function AdminAvailabilityPage() {
     setIsModalOpen(true);
   };
 
+  const handleOpenAddBlock = () => {
+    resetForm();
+    setFormType('SPECIFIC_DATE');
+    setFormDate(selectedDate || todayKey());
+    setFormIsAvailable(false);
+    setFormStart('12:00');
+    setFormEnd('13:00');
+    setFormNote('');
+    setFormFullDay(false);
+    setIsModalOpen(true);
+  };
+
   const handleOpenEdit = (a: AvailabilityRecord) => {
     setEditingId(a.id);
     setFormType(a.type);
@@ -242,8 +292,15 @@ export default function AdminAvailabilityPage() {
     setFormDate(a.date ?? selectedDate ?? todayKey());
     setFormStart(a.startTime);
     setFormEnd(a.endTime);
+    setFormStartHour(time24To12Hour(a.startTime));
+    setFormStartMinute(time24To12Minute(a.startTime));
+    setFormStartPeriod(time24To12Period(a.startTime));
+    setFormEndHour(time24To12Hour(a.endTime));
+    setFormEndMinute(time24To12Minute(a.endTime));
+    setFormEndPeriod(time24To12Period(a.endTime));
     setFormIsAvailable(a.isAvailable);
     setFormNote(a.note ?? '');
+    setFormFullDay(!a.isAvailable && a.startTime === '00:00' && a.endTime === '23:59');
     setIsModalOpen(true);
   };
 
@@ -264,10 +321,12 @@ export default function AdminAvailabilityPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const start = formFullDay ? '00:00' : formStart;
+    const end = formFullDay ? '23:59' : formEnd;
     const payload: any = {
       type: formType,
-      startTime: formStart,
-      endTime: formEnd,
+      startTime: start,
+      endTime: end,
       isAvailable: formIsAvailable,
       note: formNote || null,
     };
@@ -574,65 +633,160 @@ export default function AdminAvailabilityPage() {
               </p>
             </div>
           ) : (
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(92px, 1fr))',
-                gap: '0.5rem',
-              }}
-            >
-              {selectedDayData.slots.map(s => {
-                const state = !s.available ? s.reason : 'available';
-                const styleMap: Record<string, React.CSSProperties> = {
-                  available: {
-                    backgroundColor: 'var(--surface-sage)',
-                    border: '1px solid #BCCDB7',
-                    color: '#3C5645',
-                  },
-                  booked: {
-                    backgroundColor: '#FEE2E2',
-                    border: '1px solid #FECACA',
-                    color: '#7F1D1D',
-                    textDecoration: 'line-through',
-                  },
-                  blocked: {
-                    backgroundColor: '#F3F4F6',
-                    border: '1px solid #E5E7EB',
-                    color: '#6B7280',
-                    textDecoration: 'line-through',
-                  },
-                  past: {
-                    backgroundColor: '#F9FAFB',
-                    border: '1px solid #E5E7EB',
-                    color: '#9CA3AF',
-                  },
-                  unconfigured: {
-                    backgroundColor: '#FAFAFA',
-                    border: '1px dashed #E5E7EB',
-                    color: '#9CA3AF',
-                  },
-                };
-                const icon = state === 'available' ? <CheckCircle2 size={12} /> : state === 'booked' ? <Ban size={12} /> : state === 'blocked' ? <X size={12} /> : null;
-                return (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              {/* Available Times */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--soft-charcoal)', margin: 0 }}>
+                  Available Times
+                </h4>
+                {selectedDayData.slots.filter(s => s.available).length === 0 ? (
+                  <p style={{ margin: 0, fontSize: '0.85rem', color: '#9CA3AF' }}>
+                    No available times on this date.
+                  </p>
+                ) : (
                   <div
-                    key={s.time}
                     style={{
-                      padding: '0.55rem 0.5rem',
-                      borderRadius: '8px',
-                      fontSize: '0.8rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '0.3rem',
-                      textAlign: 'center',
-                      ...styleMap[state || 'unconfigured'],
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(auto-fill, minmax(92px, 1fr))',
+                      gap: '0.5rem',
                     }}
                   >
-                    {icon}
-                    <span>{s.time}</span>
+                    {selectedDayData.slots.filter(s => s.available).map(s => (
+                      <div
+                        key={s.time}
+                        style={{
+                          padding: '0.55rem 0.5rem',
+                          borderRadius: '8px',
+                          fontSize: '0.8rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '0.3rem',
+                          textAlign: 'center',
+                          backgroundColor: 'var(--surface-sage)',
+                          border: '1px solid #BCCDB7',
+                          color: '#3C5645',
+                        }}
+                      >
+                        <CheckCircle2 size={12} />
+                        <span>{s.time}</span>
+                      </div>
+                    ))}
                   </div>
-                );
-              })}
+                )}
+              </div>
+
+              {/* Blocked Times */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', borderTop: '1px solid #E5E7EB', paddingTop: '1rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <h4 style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--soft-charcoal)', margin: 0 }}>
+                    Blocked Times
+                  </h4>
+                  {!isPastDate(selectedDate) && (
+                    <button
+                      onClick={handleOpenAddBlock}
+                      className="btn btn-secondary"
+                      style={{ padding: '0.35rem 0.65rem', fontSize: '0.75rem', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}
+                    >
+                      <Plus size={12} /> Add Blocked Time
+                    </button>
+                  )}
+                </div>
+                {availabilities.filter(a => a.type === 'SPECIFIC_DATE' && a.date === selectedDate && !a.isAvailable).length === 0 ? (
+                  <p style={{ margin: 0, fontSize: '0.85rem', color: '#9CA3AF' }}>
+                    No blocked times for this date.
+                  </p>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                    {availabilities
+                      .filter(a => a.type === 'SPECIFIC_DATE' && a.date === selectedDate && !a.isAvailable)
+                      .map(b => {
+                        const isFullDay = b.startTime === '00:00' && b.endTime === '23:59';
+                        return (
+                          <div
+                            key={b.id}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              padding: '0.5rem 0.75rem',
+                              backgroundColor: '#F9FAFB',
+                              border: '1px solid #E5E7EB',
+                              borderRadius: '8px',
+                              fontSize: '0.85rem',
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <Ban size={14} color="#6B7280" />
+                              <div>
+                                <span style={{ fontWeight: 500, color: '#374151' }}>
+                                  {isFullDay ? 'Full Day Blocked' : `${time24To12(b.startTime)} – ${time24To12(b.endTime)}`}
+                                </span>
+                                {b.note && <span style={{ color: '#6B7280', fontSize: '0.75rem', marginLeft: '0.5rem' }}>· {b.note}</span>}
+                              </div>
+                            </div>
+                            <div style={{ display: 'flex', gap: '0.25rem' }}>
+                              <button
+                                onClick={() => handleOpenEdit(b)}
+                                type="button"
+                                style={{ border: 'none', background: 'none', cursor: 'pointer', color: 'var(--eucalyptus-green)', padding: '0.2rem' }}
+                                aria-label="Edit Block"
+                              >
+                                <Edit2 size={13} />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(b.id)}
+                                type="button"
+                                style={{ border: 'none', background: 'none', cursor: 'pointer', color: '#DC2626', padding: '0.2rem' }}
+                                aria-label="Delete Block"
+                              >
+                                <Trash2 size={13} />
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                )}
+              </div>
+
+              {/* Already Booked */}
+              {selectedDayData.slots.filter(s => s.reason === 'booked').length > 0 && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', borderTop: '1px solid #E5E7EB', paddingTop: '1rem' }}>
+                  <h4 style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--soft-charcoal)', margin: 0 }}>
+                    Booked Consultations
+                  </h4>
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(auto-fill, minmax(92px, 1fr))',
+                      gap: '0.5rem',
+                    }}
+                  >
+                    {selectedDayData.slots.filter(s => s.reason === 'booked').map(s => (
+                      <div
+                        key={s.time}
+                        style={{
+                          padding: '0.55rem 0.5rem',
+                          borderRadius: '8px',
+                          fontSize: '0.8rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '0.3rem',
+                          textAlign: 'center',
+                          backgroundColor: '#FEE2E2',
+                          border: '1px solid #FECACA',
+                          color: '#7F1D1D',
+                        }}
+                      >
+                        <Ban size={12} />
+                        <span>{s.time}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -663,7 +817,14 @@ export default function AdminAvailabilityPage() {
           subtitle="Applies to one specific date. Overrides any recurring rule for that day."
           emptyText="No date overrides yet. Click Add Date Override."
           items={exceptionsList}
-          renderItemLabel={a => a.date ? `${formatFriendlyDate(a.date)}  ·  ${time24To12(a.startTime)} – ${time24To12(a.endTime)}` : ''}
+          renderItemLabel={a => {
+            if (!a.date) return '';
+            const dateStr = formatFriendlyDate(a.date);
+            if (!a.isAvailable && a.startTime === '00:00' && a.endTime === '23:59') {
+              return `${dateStr}  ·  Full Day Blocked`;
+            }
+            return `${dateStr}  ·  ${time24To12(a.startTime)} – ${time24To12(a.endTime)}`;
+          }}
           onEdit={handleOpenEdit}
           onDelete={handleDelete}
         />
@@ -773,29 +934,87 @@ export default function AdminAvailabilityPage() {
                 </div>
               )}
 
+              {/* Checkbox for Full Day Block */}
+              {!formIsAvailable && formType === 'SPECIFIC_DATE' && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.25rem' }}>
+                  <input
+                    type="checkbox"
+                    id="formFullDay"
+                    checked={formFullDay}
+                    onChange={e => setFormFullDay(e.target.checked)}
+                    style={{ width: 'auto', margin: 0, cursor: 'pointer' }}
+                  />
+                  <label htmlFor="formFullDay" style={{ fontSize: '0.85rem', fontWeight: 500, cursor: 'pointer', userSelect: 'none' }}>
+                    Block Entire Day (Full-Day Closure)
+                  </label>
+                </div>
+              )}
+
               {/* Times */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '0.4rem', fontSize: '0.85rem', fontWeight: 500 }}>Start Time (24h)</label>
-                  <input
-                    type="time"
-                    value={formStart}
-                    onChange={e => setFormStart(e.target.value)}
-                    required
-                    style={{ width: '100%', padding: '0.6rem 0.75rem', borderRadius: '6px', border: '1px solid #E5E7EB', fontSize: '0.9rem' }}
-                  />
+              {(!formFullDay || formType === 'RECURRING' || formIsAvailable) && (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  {/* Start Time */}
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '0.4rem', fontSize: '0.85rem', fontWeight: 500 }}>Start Time</label>
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <select value={formStartHour} onChange={e => {
+                        const hour = e.target.value;
+                        setFormStartHour(hour);
+                        setFormStart(time12To24(Number(hour), formStartMinute, formStartPeriod));
+                      }} style={{ flex: 1, padding: '0.6rem' }}>
+                        {[...Array(12)].map((_, i) => {
+                          const h = i + 1;
+                          return <option key={h} value={String(h)}>{h}</option>;
+                        })}
+                      </select>
+                      <select value={formStartMinute} onChange={e => {
+                        const min = e.target.value;
+                        setFormStartMinute(min);
+                        setFormStart(time12To24(Number(formStartHour), min, formStartPeriod));
+                      }} style={{ flex: 1, padding: '0.6rem' }}>
+                        {['00','15','30','45'].map(m => <option key={m} value={m}>{m}</option>)}
+                      </select>
+                      <select value={formStartPeriod} onChange={e => {
+                        const per = e.target.value;
+                        setFormStartPeriod(per);
+                        setFormStart(time12To24(Number(formStartHour), formStartMinute, per));
+                      }} style={{ flex: 1, padding: '0.6rem' }}>
+                        {['AM','PM'].map(p => <option key={p} value={p}>{p}</option>)}
+                      </select>
+                    </div>
+                  </div>
+                  {/* End Time */}
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '0.4rem', fontSize: '0.85rem', fontWeight: 500 }}>End Time</label>
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <select value={formEndHour} onChange={e => {
+                        const hour = e.target.value;
+                        setFormEndHour(hour);
+                        setFormEnd(time12To24(Number(hour), formEndMinute, formEndPeriod));
+                      }} style={{ flex: 1, padding: '0.6rem' }}>
+                        {[...Array(12)].map((_, i) => {
+                          const h = i + 1;
+                          return <option key={h} value={String(h)}>{h}</option>;
+                        })}
+                      </select>
+                      <select value={formEndMinute} onChange={e => {
+                        const min = e.target.value;
+                        setFormEndMinute(min);
+                        setFormEnd(time12To24(Number(formEndHour), min, formEndPeriod));
+                      }} style={{ flex: 1, padding: '0.6rem' }}>
+                        {['00','15','30','45'].map(m => <option key={m} value={m}>{m}</option>)}
+                      </select>
+                      <select value={formEndPeriod} onChange={e => {
+                        const per = e.target.value;
+                        setFormEndPeriod(per);
+                        setFormEnd(time12To24(Number(formEndHour), formEndMinute, per));
+                      }} style={{ flex: 1, padding: '0.6rem' }}>
+                        {['AM','PM'].map(p => <option key={p} value={p}>{p}</option>)}
+                      </select>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '0.4rem', fontSize: '0.85rem', fontWeight: 500 }}>End Time (24h)</label>
-                  <input
-                    type="time"
-                    value={formEnd}
-                    onChange={e => setFormEnd(e.target.value)}
-                    required
-                    style={{ width: '100%', padding: '0.6rem 0.75rem', borderRadius: '6px', border: '1px solid #E5E7EB', fontSize: '0.9rem' }}
-                  />
-                </div>
-              </div>
+              )}
 
               {/* Available? */}
               <div>

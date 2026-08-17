@@ -48,7 +48,13 @@ export async function GET(request: Request) {
       ],
     });
 
-    return NextResponse.json({ availabilities });
+    return NextResponse.json({ availabilities }, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+      }
+    });
   } catch (error) {
     console.error('Availability list error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
